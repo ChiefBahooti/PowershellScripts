@@ -32,25 +32,25 @@ $label_HelloUser = New-Object System.Windows.Forms.Label
 
 # Labels
 $label_FirstName = New-Object System.Windows.Forms.Label
-    $label_FirstName.Location = New-Object System.Drawing.Size($label_x,29) # Waar moet het label staan? (x,y)
-    $label_FirstName.Size = $size_label                                     # Hoe groot moet het label zijn? (w,l)
-    $label_FirstName.TextAlign = "MiddleRight"                              # Uitlijnen, left, right of center.
-    $label_FirstName.Text = "Voornaam:"                                     # Wat voor tekst moet het label weergeven?
+    $label_FirstName.Location = New-Object System.Drawing.Size($label_x,29) 
+    $label_FirstName.Size = $size_label                                     
+    $label_FirstName.TextAlign = "MiddleRight"                              
+    $label_FirstName.Text = "Voornaam:"                                     
     #$label_FirstName.BackColor = "Red"
     $form_GebruikerMaken.Controls.Add($label_FirstName)
 
 $label_LastName = New-Object System.Windows.Forms.Label
-    $label_LastName.Location = New-Object System.Drawing.Size($label_x,59)  # Waar moet het label staan? (x,y)
-    $label_LastName.Size = $size_label                                      # Hoe groot moet het label zijn? (w,l)
-    $label_LastName.TextAlign = "MiddleRight"                               # Uitlijnen, left, right of center.
-    $label_LastName.Text = "Achternaam:"                                    # Wat voor tekst moet het label weergeven?
+    $label_LastName.Location = New-Object System.Drawing.Size($label_x,59)
+    $label_LastName.Size = $size_label                                     
+    $label_LastName.TextAlign = "MiddleRight"                               
+    $label_LastName.Text = "Achternaam:"                                   
     $form_GebruikerMaken.Controls.Add($label_LastName)
 
 $label_GivenName = New-Object System.Windows.Forms.Label
-    $label_GivenName.Location = New-Object System.Drawing.Size($label_x,188)# Waar moet het label staan? (x,y)
-    $label_GivenName.Size = $size_label                                     # Hoe groot moet het label zijn? (w,l)
-    $label_GivenName.TextAlign = "MiddleRight"                              # Uitlijnen, left, right of center.
-    $label_GivenName.Text = "Getoonde naam:"                                # Wat voor tekst moet het label weergeven?
+    $label_GivenName.Location = New-Object System.Drawing.Size($label_x,188)
+    $label_GivenName.Size = $size_label                                     
+    $label_GivenName.TextAlign = "MiddleRight"                             
+    $label_GivenName.Text = "Getoonde naam:"                               
     $form_GebruikerMaken.Controls.Add($label_GivenName)
 
 
