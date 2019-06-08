@@ -45,6 +45,20 @@ Function ImporteerCsvLijst {
     }
 }
 
+Function ImporteerGebruikerGUI {
+
+   $gebr_Voornaam = $txtb_FirstName.Text
+   $gebr_Achternaam =  $txtb_LastName.Text
+   $gebr_Email = $txtb_EmailAddr.Text
+   $gebr_Functie = $txtb_Description.Text
+   $gebr_telnr = $txtb_PhoneNumber.Text
+   $gebr_unaam = $txtb_Username.Text
+   $gebr_oupad = $txtb_OUPad.Text
+
+   MaakGebruikerAan
+
+}
+
 # Deze functie haalt snel het formulier leeg.
 Function WisFormulier { 
     $txtb_FirstName.Text = ""
@@ -114,18 +128,25 @@ $label_Telephone = New-Object System.Windows.Forms.Label
     $form_GebruikerMaken.Controls.Add($label_Telephone)
 
 $label_Username = New-Object System.Windows.Forms.Label
-    $label_Username.Location = New-Object System.Drawing.Size($label_x,175) 
+    $label_Username.Location = New-Object System.Drawing.Size($label_x_left,175) 
     $label_Username.Size = $size_label                                     
     $label_Username.TextAlign = "MiddleRight"                              
     $label_Username.Text = "Gebruikersnaam:"                                     
     $form_GebruikerMaken.Controls.Add($label_Username)
 
 $label_Password = New-Object System.Windows.Forms.Label
-    $label_Password.Location = New-Object System.Drawing.Size($label_x,204) 
+    $label_Password.Location = New-Object System.Drawing.Size($label_x_left,204) 
     $label_Password.Size = $size_label                                     
     $label_Password.TextAlign = "MiddleRight"                              
     $label_Password.Text = "Wachtwoord:"                                     
     $form_GebruikerMaken.Controls.Add($label_Password)
+
+$label_OUPad = New-Object System.Windows.Forms.Label
+    $label_OUPad.Location = New-Object System.Drawing.Size($label_x_left,233) 
+    $label_OUPad.Size = $size_label                                     
+    $label_OUPad.TextAlign = "MiddleRight"                              
+    $label_OUPad.Text = "OU:"                                     
+    $form_GebruikerMaken.Controls.Add($label_OUPad)
 
 # Buttons
 $knop_GebruikerAanmaken = New-Object System.Windows.Forms.Button
@@ -133,6 +154,7 @@ $knop_GebruikerAanmaken = New-Object System.Windows.Forms.Button
     $knop_GebruikerAanmaken.Size = $size_button
     $knop_GebruikerAanmaken.TextAlign = "MiddleCenter"
     $knop_GebruikerAanmaken.Text = "Gebruiker aanmaken"
+    $knop_GebruikerAanmaken.Add_Click({ImporteerGebruikerGUI})
     $form_GebruikerMaken.Controls.Add($knop_GebruikerAanmaken)
 
 $knop_GebruikerImporteren = New-Object System.Windows.Forms.Button
@@ -186,6 +208,11 @@ $txtb_Password = New-Object System.Windows.Forms.TextBox
     $txtb_Password.Location = New-Object System.Drawing.Size($txtb_x_left,199)
     $txtb_Password.Size = $size_textbox
     $form_GebruikerMaken.Controls.Add($txtb_Password)
+
+$txtb_OUPad = New-Object System.Windows.Forms.TextBox
+    $txtb_OUPad.Location = New-Object System.Drawing.Size($txtb_x_left,228)
+    $txtb_OUPad.Size = $size_textbox
+    $form_GebruikerMaken.Controls.Add($txtb_OUPad)
 
 # Laat het formulier zien.
 [void] $Form_GebruikerMaken.ShowDialog()
