@@ -1,5 +1,6 @@
 ﻿#Laad nodige assemblies
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+Import-Module ActiveDirectory
 
 # Vaste variabelen
 $size_textbox = New-Object System.Drawing.Size(240,14)
@@ -8,6 +9,28 @@ $size_button = New-Object System.Drawing.Size(130,58)
 
 $label_x = 10
 $txtb_x = 112
+
+# Functies in Powershell zijn nogal html-like, ze werken alleen als ze aangemaakt zijn *voor* je er een call naar doet.
+# Deze functie neemt argumenten vanuit het formulier of vanuit ImporteerCsvLijst en maakt een gebruiker aan op basis van deze argumenten.
+Function MaakGebruikerAan {
+
+}
+
+# Deze functie leest een Csv bestand uit en importeert deze naar de MaakGebruikerAan functie.
+Function ImporteerCsvLijst {
+
+    $dial_OpenCsv = New-Object System.Windows.Forms.OpenFileDialog
+    $dial_OpenCsv.Filter = "Comma Seperated Value(*.csv)|*.csv"
+    If($dial_OpenCsv.ShowDialog() -eq "OK") {
+        $file_GebruikerCsv = Import-Csv $dial_OpenCsv.FileName
+        ForEach($Gebruiker in $file_GebruikerCsv) {
+            # Lees het Csv bestand uit en verzamel gebruikersinformatie.
+            $gebr_Voornaam = $Gebruiker.'First Name'
+            $gebr_Achternaam = $Gebruiker.'Last Name'
+
+        }
+    }
+}
 
 
 # Een basis form en controls tekenen.
@@ -36,7 +59,6 @@ $label_FirstName = New-Object System.Windows.Forms.Label
     $label_FirstName.Size = $size_label                                     
     $label_FirstName.TextAlign = "MiddleRight"                              
     $label_FirstName.Text = "Voornaam:"                                     
-    #$label_FirstName.BackColor = "Red"
     $form_GebruikerMaken.Controls.Add($label_FirstName)
 
 $label_LastName = New-Object System.Windows.Forms.Label
@@ -46,13 +68,19 @@ $label_LastName = New-Object System.Windows.Forms.Label
     $label_LastName.Text = "Achternaam:"                                   
     $form_GebruikerMaken.Controls.Add($label_LastName)
 
-$label_GivenName = New-Object System.Windows.Forms.Label
-    $label_GivenName.Location = New-Object System.Drawing.Size($label_x,188)
-    $label_GivenName.Size = $size_label                                     
-    $label_GivenName.TextAlign = "MiddleRight"                             
-    $label_GivenName.Text = "Getoonde naam:"                               
-    $form_GebruikerMaken.Controls.Add($label_GivenName)
+$label_EmailAddr = New-Object System.Windows.Forms.Label
+    $label_EmailAddr.Location = New-Object System.Drawing.Size($label_x,88)
+    $label_EmailAddr.Size = $size_label                                     
+    $label_EmailAddr.TextAlign = "MiddleRight"                             
+    $label_EmailAddr.Text = "Email:"                               
+    $form_GebruikerMaken.Controls.Add($label_EmailAddr)
 
+$label_Description = New-Object System.Windows.Forms.Label
+    $label_Description.Location = New-Object System.Drawing.Size($label_x,117)
+    $label_Description.Size = $size_label                                     
+    $label_Description.TextAlign = "MiddleRight"                             
+    $label_Description.Text = "Beschrijving:"                               
+    $form_GebruikerMaken.Controls.Add($label_Description)
 
 # Buttons
 $knop_GebruikerAanmaken = New-Object System.Windows.Forms.Button
@@ -67,6 +95,7 @@ $knop_GebruikerImporteren = New-Object System.Windows.Forms.Button
     $knop_GebruikerImporteren.Size = $size_button
     $knop_GebruikerImporteren.TextAlign = "MiddleCenter"
     $knop_GebruikerImporteren.Text = "Gebruikers importeren"
+	$knop_GebruikerImporteren.Add_Click({ImporteerCsvLijst})
     $form_GebruikerMaken.Controls.Add($knop_GebruikerImporteren)
 
 $knop_FormulierLegen = New-Object System.Windows.Forms.Button
@@ -75,7 +104,6 @@ $knop_FormulierLegen = New-Object System.Windows.Forms.Button
     $knop_FormulierLegen.TextAlign = "MiddleCenter"
     $knop_FormulierLegen.Text = "Wis formulier"
     $form_GebruikerMaken.Controls.Add($knop_FormulierLegen)
-
 
 # Velden
 $txtb_FirstName = New-Object System.Windows.Forms.TextBox
@@ -88,13 +116,22 @@ $txtb_Lastname = New-Object System.Windows.Forms.TextBox
     $txtb_Lastname.Size = $size_textbox
     $form_GebruikerMaken.Controls.Add($txtb_Lastname)
 
+$txtb_EmailAddr = New-Object System.Windows.Forms.TextBox
+    $txtb_EmailAddr.Location = New-Object System.Drawing.Size($txtb_x,83)
+    $txtb_EmailAddr.Size = $size_textbox
+    $form_GebruikerMaken.Controls.Add($txtb_EmailAddr)
 
+$txtb_Description = New-Object System.Windows.Forms.TextBox
+    $txtb_Description.Location = New-Object System.Drawing.Size($txtb_x,112)
+    $txtb_Description.Size = $size_textbox
+    $form_GebruikerMaken.Controls.Add($txtb_Description)
 
-
-
+$txtb_PhoneNumber = New-Object System.Windows.Forms.TextBox
+    $txtb_PhoneNumber.Location = New-Object System.Drawing.Size($txtb_x,141)
+    $txtb_PhoneNumber.Size = $size_textbox
+    $form_GebruikerMaken.Controls.Add($txtb_PhoneNumber)
 
 # Laat het formulier zien.
-#$Form_GebruikerMaken.Add_Shown({$Form.GebruikerMaken.Activate()})
 [void] $Form_GebruikerMaken.ShowDialog()
 
 
