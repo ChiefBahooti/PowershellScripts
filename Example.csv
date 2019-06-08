@@ -1,0 +1,5 @@
+﻿Voornaam,Achternaam,Email,Telnr,Functie,OUPad
+Johan,Wilden,j.wilden@test.tld,011-1234560,Financieel Directeur,"OU=CSVTest,DC=periode4,DC=nopo"
+Walter,Boomstronk,w.boomstronk@test.tld,011-1234561,Logistiek Medewerker,"OU=CSVTest,DC=periode4,DC=nopo"
+Karel,Koffiemaker,k.koffiemaker@test.tld,011-1234562,Koffiezetter,"OU=CSVTest,DC=periode4,DC=nopo"
+Mark,Lubberts,m.lubberts@test.tld,011-1234563,Wanhopige Iter,"OU=CSVTest,DC=periode4,DC=nopo"

@@ -15,9 +15,14 @@ $gebr_Password = ConvertTo-SecureString "Potetos1!" -AsPlainText -Force
 
 # Functies in Powershell zijn nogal html-like, ze werken alleen als ze aangemaakt zijn *voor* je er een call naar doet.
 # Deze functie neemt argumenten vanuit het formulier of vanuit ImporteerCsvLijst en maakt een gebruiker aan op basis van deze argumenten.
-Function MaakGebruikerAan([string]$maak_vnaam, [string]$maak_anaam, [string]$maak_telnr) {
+Function MaakGebruikerAan {
 
-    New-ADUser -Name "$maak_vnaam $maak_anaam" -GivenName $maak_vnaam -Surname $maak_anaam -OfficePhone $maak_telnr  -EmailAddress "$" -Description "$" -AccountPassword $gebr_Password -ChangePasswordAtLogon $True -Enabled $True
+    # Maak een degelijke username aan.
+    $gebr_filter = $gebr_Voornaam.Substring(0,1).ToLower()
+    $gebr_unaam = "$gebr_filter.$gebr_Achternaam"
+
+    # Maak de gebruiker zelf aan met alle gegevens en een geforceerde password reset.
+    New-ADUser -Name "$gebr_Voornaam $gebr_Achternaam" -GivenName $gebr_Voornaam -Surname $gebr_Achternaam -UserPrincipalName $gebr_unaam -OfficePhone $gebr_telnr -EmailAddress $gebr_Email -Description $gebr_Functie -AccountPassword $gebr_Password -Path $gebr_OUPad -ChangePasswordAtLogon $True -Enabled $True
 }
 
 # Deze functie leest een Csv bestand uit en importeert deze naar de MaakGebruikerAan functie.
@@ -35,6 +40,7 @@ Function ImporteerCsvLijst {
             $gebr_Telnr = $Gebruiker.'Telnr'
             $gebr_Functie = $Gebruiker.'Functie'
             $gebr_OUPad = $Gebruiker.'OUPad'
+            MaakGebruikerAan
         }
     }
 }
