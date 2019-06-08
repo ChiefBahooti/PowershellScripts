@@ -34,7 +34,7 @@ Function MaakGebruikerAan {
     # Maak de gebruiker zelf aan met alle gegevens en een geforceerde password reset.
     # We doen ook direct een controle of het account bestaat en geven de juiste melding door!
     New-ADUser -Name "$gebr_Voornaam $gebr_Achternaam" -GivenName $gebr_Voornaam -Surname $gebr_Achternaam -UserPrincipalName $gebr_unaam -OfficePhone $gebr_telnr -EmailAddress $gebr_Email -Description $gebr_Functie -AccountPassword $gebr_Password -Path $gebr_OUPad -ChangePasswordAtLogon $True -Enabled $True
-    if(@(Get-ADUser -Filter { SamAccountName -eq $gebr_unaam }).Count -eq 0) {  
+    if(@(Get-ADUser -Filter { UserPrincipalName -eq $gebr_unaam }).Count -eq 0) {  
         $txtb_Output.Text = $txtb_Output.Text + "[AD_USR]: Het account '$gebr_Voornaam $gebr_Achternaam' kon niet worden aangemaakt!`r`n"
     } else {    
         $txtb_Output.Text = $txtb_Output.Text + "[AD_USR]: $gebr_Voornaam $gebr_Achternaam is aangemaakt!`r`n"
