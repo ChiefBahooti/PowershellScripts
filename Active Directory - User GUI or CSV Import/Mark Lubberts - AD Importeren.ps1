@@ -28,7 +28,7 @@ $gebr_Password = ConvertTo-SecureString "Potetos1!" -AsPlainText -Force
 Function MaakGebruikerAan {
 
     # Maak een degelijke username aan.
-    if($txtb_Username.TextLength -eq "") {
+    if($txtb_Username.TextLength -eq 0) {
     $gebr_filter = $gebr_Voornaam.Substring(0,1)
     $gebr_unaam = "$gebr_filter.$gebr_Achternaam".ToLower()
     } else {
