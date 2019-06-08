@@ -79,7 +79,7 @@ Function WisFormulier {
 # Een basis form en controls tekenen.
 $Form_GebruikerMaken = New-Object System.Windows.Forms.Form
     $Form_GebruikerMaken.Text = "Gebruiker aanmaken"                      # Titel van het venster
-    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(764,287)   # Resolutie van het venster
+    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(784,317)   # Resolutie van het venster
     $Form_GebruikerMaken.FormBorderStyle = "FixedDialog"                  # Venster kan niet groter of kleiner gemaakt worden
     $Form_GebruikerMaken.TopMost = $true                                  # Het venster verschijnt altijd boven alle andere vensters.
     $Form_GebruikerMaken.MaximizeBox = $false                             # Maximaliseerknop uitschakelen
