@@ -1,16 +1,26 @@
-﻿#Laad nodige assemblies
-[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
-Import-Module ActiveDirectory
+﻿#
+# Dit script is geschreven door Mark Lubberts.
+# Voel je vrij om het ter referentie te gebruiken (of het gewoon in te leveren maar dat zou ik niet aanraden).
+# Fijne dag toegewenst en veel succes met het script!#
+#
+# Oh juist, dit script werkt alleen op een Windows Server machine met Active Directory geïnstalleerd en geconfigureerd.
 
-# Vaste variabelen
+
+#Laad nodige assemblies
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") # De library die we nodig hebben om een GUI te maken.
+Import-Module ActiveDirectory                                                    # De library die we nodig hebben om met ActiveDirectory te werken, dit geeft een error op niet Windows Server machines.
+
+# De afmetingen voor de GUI elementen (invoervelden, labels, knoppen)
 $size_textbox = New-Object System.Drawing.Size(240,14)
 $size_label = New-Object System.Drawing.Size(100,12)
 $size_button = New-Object System.Drawing.Size(130,58)
 
+# Een paar GUI elementen komen heel vaak voor, het doet ons doet deze een consistente plaatsing te geven.
 $label_x_left = 10
 $txtb_x_left = 112
 $txtb_x_right = 500
 
+# Defineer een standaard wachtwoord voor accounts.
 $gebr_Password = ConvertTo-SecureString "Potetos1!" -AsPlainText -Force
 
 # Functies in Powershell zijn nogal html-like, ze werken alleen als ze aangemaakt zijn *voor* je er een call naar doet.
@@ -50,6 +60,9 @@ Function ImporteerCsvLijst {
     }
 }
 
+# Dit is een wrapper functie.
+# Omdat de GUI zelf ook losse accounts aan kan maken moet ik een CSV import emuleren.
+# Deze functie doet dat.
 Function ImporteerGebruikerGUI {
 
    $gebr_Voornaam = $txtb_FirstName.Text
@@ -59,9 +72,7 @@ Function ImporteerGebruikerGUI {
    $gebr_telnr = $txtb_PhoneNumber.Text
    $gebr_unaam = $txtb_Username.Text
    $gebr_oupad = $txtb_OUPad.Text
-
    MaakGebruikerAan
-
 }
 
 # Deze functie haalt snel het formulier leeg.
@@ -76,25 +87,30 @@ Function WisFormulier {
 }
 
 
+# Hieronder vind je alle gebruikte GUI elementen.
+# Aanpassingen hier zijn vrij veilig hoewel het wel een knop kapot kan maken zal het programma zelf altijd starten.
+
+
+
 # Een basis form en controls tekenen.
-$Form_GebruikerMaken = New-Object System.Windows.Forms.Form
-    $Form_GebruikerMaken.Text = "Gebruiker aanmaken"                      # Titel van het venster
-    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(784,317)   # Resolutie van het venster
-    $Form_GebruikerMaken.FormBorderStyle = "FixedDialog"                  # Venster kan niet groter of kleiner gemaakt worden
-    $Form_GebruikerMaken.TopMost = $true                                  # Het venster verschijnt altijd boven alle andere vensters.
-    $Form_GebruikerMaken.MaximizeBox = $false                             # Maximaliseerknop uitschakelen
-    $Form_GebruikerMaken.MinimizeBox = $true                              # Minimaliseerknop inschakelen.
-    $Form_GebruikerMaken.ControlBox = $true                               # Sluitknop inschakelen
-    $Form_GebruikerMaken.StartPosition = "CenterScreen"                   # Venster opent in het midden van het scherm.
-    $Form_GebruikerMaken.Font = "Segoe UI"                                # Vensterfont op Segoe UI zetten.
+$Form_GebruikerMaken = New-Object System.Windows.Forms.Form                                  # Alle gebruikte functies van de Form class en wat ze doen.
+    $Form_GebruikerMaken.Text = "Gebruiker aanmaken"                                         # Titel van het venster
+    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(784,317)                      # Resolutie van het venster
+    $Form_GebruikerMaken.FormBorderStyle = "FixedDialog"                                     # Venster kan niet groter of kleiner gemaakt worden
+    $Form_GebruikerMaken.TopMost = $true                                                     # Het venster verschijnt altijd boven alle andere vensters.
+    $Form_GebruikerMaken.MaximizeBox = $false                                                # Maximaliseerknop uitschakelen
+    $Form_GebruikerMaken.MinimizeBox = $true                                                 # Minimaliseerknop inschakelen.
+    $Form_GebruikerMaken.ControlBox = $true                                                  # Sluitknop inschakelen
+    $Form_GebruikerMaken.StartPosition = "CenterScreen"                                      # Venster opent in het midden van het scherm.
+    $Form_GebruikerMaken.Font = "Segoe UI"                                                   # Vensterfont op Segoe UI zetten.
 
 # Een label toevoegen aan het scherm.
-$label_HelloUser = New-Object System.Windows.Forms.Label
-    $label_HelloUser.Location = New-Object System.Drawing.Size(3,3)         # Waar moet het label staan? (x,y)
-    $label_HelloUser.Size = New-Object System.Drawing.Size(400,12)          # Hoe groot moet het label zijn? (w,l)
-    $label_HelloUser.TextAlign = "MiddleLeft"                               # Uitlijnen, left, right of center.
-    $label_HelloUser.Text = "Vul alle gevraagde gegevens in of importeer een csv bestand"
-    $form_GebruikerMaken.Controls.Add($label_HelloUser)
+$label_HelloUser = New-Object System.Windows.Forms.Label                                     # Alle gebruikte functies van de Form class en wat ze doen.
+    $label_HelloUser.Location = New-Object System.Drawing.Size(3,3)                          # Waar moet het label staan? (x,y)
+    $label_HelloUser.Size = New-Object System.Drawing.Size(400,12)                           # Hoe groot moet het label zijn? (w,l)
+    $label_HelloUser.TextAlign = "MiddleLeft"                                                # Uitlijnen, left, right of center.
+    $label_HelloUser.Text = "Vul alle gevraagde gegevens in of importeer een csv bestand"    # De tekst in het label.
+    $form_GebruikerMaken.Controls.Add($label_HelloUser)                                      # Het element toevoegen aan het venster zodat het ook echt zichtbaar is.
 
 # Labels
 $label_FirstName = New-Object System.Windows.Forms.Label
