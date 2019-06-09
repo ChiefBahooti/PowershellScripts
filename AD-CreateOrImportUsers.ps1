@@ -23,6 +23,7 @@ Function MaakGebruikerAan {
 
     # Maak de gebruiker zelf aan met alle gegevens en een geforceerde password reset.
     New-ADUser -Name "$gebr_Voornaam $gebr_Achternaam" -GivenName $gebr_Voornaam -Surname $gebr_Achternaam -UserPrincipalName $gebr_unaam -OfficePhone $gebr_telnr -EmailAddress $gebr_Email -Description $gebr_Functie -AccountPassword $gebr_Password -Path $gebr_OUPad -ChangePasswordAtLogon $True -Enabled $True
+    $txtb_Output.Text = $txtb_Output.Text + "[AD_USR]: $gebr_Voornaam $gebr_Achternaam is aangemaakt!`r`n"
 }
 
 # Deze functie leest een Csv bestand uit en importeert deze naar de MaakGebruikerAan functie.
@@ -32,6 +33,11 @@ Function ImporteerCsvLijst {
     $dial_OpenCsv.Filter = "Comma Seperated Value(*.csv)|*.csv"
     If($dial_OpenCsv.ShowDialog() -eq "OK") {
         $file_GebruikerCsv = Import-Csv $dial_OpenCsv.FileName
+
+        # Geef een 5 seconden waarschuwing voor we beginnen.
+        $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: De GUI kan bevriezen tijdens de import, dit is normaal!`r`n"
+        $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: De import begint over 5 seconden..."
+        Start-Sleep -Seconds 5
         ForEach($Gebruiker in $file_GebruikerCsv) {
             # Lees het Csv bestand uit en verzamel gebruikersinformatie.
             $gebr_Voornaam = $Gebruiker.'Voornaam'
@@ -213,6 +219,14 @@ $txtb_OUPad = New-Object System.Windows.Forms.TextBox
     $txtb_OUPad.Location = New-Object System.Drawing.Size($txtb_x_left,228)
     $txtb_OUPad.Size = $size_textbox
     $form_GebruikerMaken.Controls.Add($txtb_OUPad)
+
+$txtb_Output = New-Object System.Windows.Forms.TextBox
+    $txtb_Output.Location = New-Object System.Drawing.Size(361,83)
+    $txtb_Output.Size = New-Object System.Drawing.Size(388,167)
+    $txtb_Output.Enabled = $False
+    $txtb_Output.BackColor = "White"
+    $txtb_Output.Multiline = $True
+    $form_GebruikerMaken.Controls.Add($txtb_Output)
 
 # Laat het formulier zien.
 [void] $Form_GebruikerMaken.ShowDialog()
