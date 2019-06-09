@@ -28,12 +28,17 @@ $gebr_Password = ConvertTo-SecureString "Potetos1!" -AsPlainText -Force
 Function MaakGebruikerAan {
 
     # Maak een degelijke username aan.
+    if($txtb_Username.TextLength -eq "") {
     $gebr_filter = $gebr_Voornaam.Substring(0,1)
     $gebr_unaam = "$gebr_filter.$gebr_Achternaam".ToLower()
+    } else {
+        $gebr_unaam = $txtb_Username.Text.ToLower()
+    }
 
     # Nog even checken of de gebruiker niet al bestaat...
     if(@(Get-ADUser -Filter { UserPrincipalName -eq $gebr_unaam }).Count -eq 1) {  
-        $txtb_Output.Text = $txtb_Output.Text + "[AD_USR]: Het account '$gebr_Voornaam $gebr_Achternaam' bestaat al!"     
+        $txtb_Output.Text = $txtb_Output.Text + "[AD_USR]: Het account '$gebr_Voornaam $gebr_Achternaam' bestaat al!`r`n"   
+        return  
     } 
 
     # Maak de gebruiker zelf aan met alle gegevens en een geforceerde password reset.
