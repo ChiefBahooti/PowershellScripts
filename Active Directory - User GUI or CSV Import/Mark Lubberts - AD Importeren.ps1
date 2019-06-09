@@ -20,6 +20,12 @@ $label_x_left = 10
 $txtb_x_left = 112
 $txtb_x_right = 500
 
+# De rechten op homefolders
+$home_Rechten = [System.Security.AccessControl.FileSystemRights]"Modify"
+$home_Control = [System.Security.AccessControl.AccessControlType]::Allow
+$home_Inherit = [System.Security.AccessControl.InheritanceFlags]"ContainerInherit, ObjectInherit" 
+$home_Propagation = [System.Security.AccessControl.PropagationFlags]"None"
+
 # Defineer een standaard wachtwoord voor accounts.
 $gebr_Password = ConvertTo-SecureString "Potetos1!" -AsPlainText -Force
 
@@ -41,9 +47,21 @@ Function MaakGebruikerAan {
         return  
     } 
 
+    # Voorbereidingen treffen om de Home Directory aan te maken.
+    $home_Folder = "\\P4-DC1\UserHome$\$($gebr_unaam)"
+
     # Maak de gebruiker zelf aan met alle gegevens en een geforceerde password reset.
     # We doen ook direct een controle of het account bestaat en geven de juiste melding door!
-    New-ADUser -Name "$gebr_Voornaam $gebr_Achternaam" -GivenName $gebr_Voornaam -Surname $gebr_Achternaam -SamAccountName $gebr_unaam -UserPrincipalName $gebr_unaam -OfficePhone $gebr_telnr -EmailAddress $gebr_Email -Description $gebr_Functie -AccountPassword $gebr_Password -Path $gebr_OUPad -ChangePasswordAtLogon $True -Enabled $True
+    New-Item -path $home_Folder -ItemType Directory -force
+    New-ADUser -Name "$gebr_Voornaam $gebr_Achternaam" -GivenName $gebr_Voornaam -Surname $gebr_Achternaam -SamAccountName $gebr_unaam -UserPrincipalName $gebr_unaam -OfficePhone $gebr_telnr -EmailAddress $gebr_Email -Description $gebr_Functie -AccountPassword $gebr_Password -Path $gebr_OUPad -HomeDrive "H:" -HomeDirectory "\\P4-DC1\UserHome$\$($gebr_unaam)" -ChangePasswordAtLogon $True -Enabled $True
+    
+    # Permissions instellen op de user HomeFolder.
+    $home_User = Get-ADUser -Identity $gebr_Unaam
+    $home_FinalRule = New-Object System.Security.AccessControl.FileSystemAccessRule($home_User.SID, $home_Rechten, $home_Inherit, $home_Propagation, $home_Control)
+    $home_Acl = Get-Acl $home_Folder
+    $home_Acl.AddAccessRule($home_FinalRule)
+    Set-Acl -Path $home_Folder -AclObject $home_Acl
+
     if(@(Get-ADUser -Filter { UserPrincipalName -eq $gebr_unaam }).Count -eq 0) {  
         $txtb_Output.Text = $txtb_Output.Text + "[AD_USR]: Het account '$gebr_Voornaam $gebr_Achternaam' kon niet worden aangemaakt!`r`n"
     } else {    
