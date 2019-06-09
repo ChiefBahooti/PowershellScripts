@@ -18,8 +18,8 @@ $gebr_Password = ConvertTo-SecureString "Potetos1!" -AsPlainText -Force
 Function MaakGebruikerAan {
 
     # Maak een degelijke username aan.
-    $gebr_filter = $gebr_Voornaam.Substring(0,1).ToLower()
-    $gebr_unaam = "$gebr_filter.$gebr_Achternaam"
+    $gebr_filter = $gebr_Voornaam.Substring(0,1)
+    $gebr_unaam = "$gebr_filter.$gebr_Achternaam".ToLower()
 
     # Maak de gebruiker zelf aan met alle gegevens en een geforceerde password reset.
     New-ADUser -Name "$gebr_Voornaam $gebr_Achternaam" -GivenName $gebr_Voornaam -Surname $gebr_Achternaam -UserPrincipalName $gebr_unaam -OfficePhone $gebr_telnr -EmailAddress $gebr_Email -Description $gebr_Functie -AccountPassword $gebr_Password -Path $gebr_OUPad -ChangePasswordAtLogon $True -Enabled $True
@@ -74,7 +74,7 @@ Function WisFormulier {
 # Een basis form en controls tekenen.
 $Form_GebruikerMaken = New-Object System.Windows.Forms.Form
     $Form_GebruikerMaken.Text = "Gebruiker aanmaken"                      # Titel van het venster
-    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(1440,900)  # Resolutie van het venster
+    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(764,287)   # Resolutie van het venster
     $Form_GebruikerMaken.FormBorderStyle = "FixedDialog"                  # Venster kan niet groter of kleiner gemaakt worden
     $Form_GebruikerMaken.TopMost = $true                                  # Het venster verschijnt altijd boven alle andere vensters.
     $Form_GebruikerMaken.MaximizeBox = $false                             # Maximaliseerknop uitschakelen
@@ -150,7 +150,7 @@ $label_OUPad = New-Object System.Windows.Forms.Label
 
 # Buttons
 $knop_GebruikerAanmaken = New-Object System.Windows.Forms.Button
-    $knop_GebruikerAanmaken.Location = New-Object System.Drawing.Size(1043,50)
+    $knop_GebruikerAanmaken.Location = New-Object System.Drawing.Size(360,24)
     $knop_GebruikerAanmaken.Size = $size_button
     $knop_GebruikerAanmaken.TextAlign = "MiddleCenter"
     $knop_GebruikerAanmaken.Text = "Gebruiker aanmaken"
@@ -158,7 +158,7 @@ $knop_GebruikerAanmaken = New-Object System.Windows.Forms.Button
     $form_GebruikerMaken.Controls.Add($knop_GebruikerAanmaken)
 
 $knop_GebruikerImporteren = New-Object System.Windows.Forms.Button
-    $knop_GebruikerImporteren.Location = New-Object System.Drawing.Size(1173,50)
+    $knop_GebruikerImporteren.Location = New-Object System.Drawing.Size(490,24)
     $knop_GebruikerImporteren.Size = $size_button
     $knop_GebruikerImporteren.TextAlign = "MiddleCenter"
     $knop_GebruikerImporteren.Text = "Gebruikers importeren"
@@ -166,7 +166,7 @@ $knop_GebruikerImporteren = New-Object System.Windows.Forms.Button
     $form_GebruikerMaken.Controls.Add($knop_GebruikerImporteren)
 
 $knop_FormulierLegen = New-Object System.Windows.Forms.Button
-    $knop_FormulierLegen.Location = New-Object System.Drawing.Size(1303,50)
+    $knop_FormulierLegen.Location = New-Object System.Drawing.Size(620,24)
     $knop_FormulierLegen.Size = $size_button
     $knop_FormulierLegen.TextAlign = "MiddleCenter"
     $knop_FormulierLegen.Text = "Wis formulier"
