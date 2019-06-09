@@ -28,16 +28,15 @@ Function MaakGebruikerAan {
 
 # Deze functie leest een Csv bestand uit en importeert deze naar de MaakGebruikerAan functie.
 Function ImporteerCsvLijst {
-
+    # Tijdens grote imports hangt de GUI even, de gebruiker informeren is wel zo handig.
+    
     $dial_OpenCsv = New-Object System.Windows.Forms.OpenFileDialog
     $dial_OpenCsv.Filter = "Comma Seperated Value(*.csv)|*.csv"
     If($dial_OpenCsv.ShowDialog() -eq "OK") {
         $file_GebruikerCsv = Import-Csv $dial_OpenCsv.FileName
 
         # Geef een 5 seconden waarschuwing voor we beginnen.
-        $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: De GUI kan bevriezen tijdens de import, dit is normaal!`r`n"
-        $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: De import begint over 5 seconden..."
-        Start-Sleep -Seconds 5
+        
         ForEach($Gebruiker in $file_GebruikerCsv) {
             # Lees het Csv bestand uit en verzamel gebruikersinformatie.
             $gebr_Voornaam = $Gebruiker.'Voornaam'
@@ -225,10 +224,12 @@ $txtb_Output = New-Object System.Windows.Forms.TextBox
     $txtb_Output.Size = New-Object System.Drawing.Size(388,167)
     $txtb_Output.Enabled = $False
     $txtb_Output.BackColor = "White"
+    $txtb_Output.ScrollBars = "Vertical"
     $txtb_Output.Multiline = $True
     $form_GebruikerMaken.Controls.Add($txtb_Output)
 
-# Laat het formulier zien.
+# Laat het formulier zien en waarschuw de gebruiker dat GUI freezes normaal zijn.
+$txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: De GUI kan bevriezen tijdens de import, dit is normaal!`r`n"
 [void] $Form_GebruikerMaken.ShowDialog()
 
 
