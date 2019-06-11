@@ -136,27 +136,17 @@ Function WisFormulier {
 # Hieronder vind je alle gebruikte GUI elementen.
 # Aanpassingen hier zijn vrij veilig hoewel het wel een knop kapot kan maken zal het programma zelf altijd starten.
 
-
-
 # Een basis form en controls tekenen.
-$Form_GebruikerMaken = New-Object System.Windows.Forms.Form                                  # Alle gebruikte functies van de Form class en wat ze doen.
-    $Form_GebruikerMaken.Text = "Gebruiker aanmaken"                                         # Titel van het venster
-    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(764,547)                      # Resolutie van het venster
-    $Form_GebruikerMaken.FormBorderStyle = "FixedDialog"                                     # Venster kan niet groter of kleiner gemaakt worden
-    $Form_GebruikerMaken.TopMost = $true                                                     # Het venster verschijnt altijd boven alle andere vensters.
-    $Form_GebruikerMaken.MaximizeBox = $false                                                # Maximaliseerknop uitschakelen
-    $Form_GebruikerMaken.MinimizeBox = $true                                                 # Minimaliseerknop inschakelen.
-    $Form_GebruikerMaken.ControlBox = $true                                                  # Sluitknop inschakelen
-    $Form_GebruikerMaken.StartPosition = "CenterScreen"                                      # Venster opent in het midden van het scherm.
-    $Form_GebruikerMaken.Font = "Segoe UI"                                                   # Vensterfont op Segoe UI zetten.
-
-# Een label toevoegen aan het scherm.
-#$label_HelloUser = New-Object System.Windows.Forms.Label                                     # Alle gebruikte functies van de Form class en wat ze doen.
-#    $label_HelloUser.Location = New-Object System.Drawing.Size(3,3)                          # Waar moet het label staan? (x,y)
-#    $label_HelloUser.Size = New-Object System.Drawing.Size(400,12)                           # Hoe groot moet het label zijn? (w,l)
-#    $label_HelloUser.TextAlign = "MiddleLeft"                                                # Uitlijnen, left, right of center.
-#    $label_HelloUser.Text = "Vul alle gevraagde gegevens in of importeer een csv bestand"    # De tekst in het label.
-#    $form_GebruikerMaken.Controls.Add($label_HelloUser)                                      # Het element toevoegen aan het venster zodat het ook echt zichtbaar is.
+$Form_GebruikerMaken = New-Object System.Windows.Forms.Form                                  
+    $Form_GebruikerMaken.Text = "Gebruiker aanmaken"                                         
+    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(764,547)                      
+    $Form_GebruikerMaken.FormBorderStyle = "FixedDialog"                                     
+    $Form_GebruikerMaken.TopMost = $true                                                     
+    $Form_GebruikerMaken.MaximizeBox = $false                                                
+    $Form_GebruikerMaken.MinimizeBox = $true                                                 
+    $Form_GebruikerMaken.ControlBox = $true                                                  
+    $Form_GebruikerMaken.StartPosition = "CenterScreen"                                      
+    $Form_GebruikerMaken.Font = "Segoe UI"                                                   
 
 # Labels
 $label_FirstName = New-Object System.Windows.Forms.Label
