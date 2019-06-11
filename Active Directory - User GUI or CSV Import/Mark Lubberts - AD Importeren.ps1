@@ -33,6 +33,9 @@ $def_HomePath   = ""                                                   # NYI: We
 #
 # Oh juist, dit script werkt alleen op een Windows Server machine met Active Directory geïnstalleerd en geconfigureerd.
 
+# Versienummer voor de app.
+$app_versie = 1.1
+
 #Laad nodige assemblies
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") # De library die we nodig hebben om een GUI te maken.
 Import-Module ActiveDirectory                                                    # De library die we nodig hebben om met ActiveDirectory te werken, dit geeft een error op niet Windows Server machines.
@@ -180,7 +183,7 @@ Function ResetFormulier {
 # Een basis form en controls tekenen.
 $Form_GebruikerMaken = New-Object System.Windows.Forms.Form                                  
     $Form_GebruikerMaken.Text            = "Gebruiker aanmaken"                                         
-    $Form_GebruikerMaken.Size            = New-Object System.Drawing.Size(764,439)                      
+    $Form_GebruikerMaken.Size            = New-Object System.Drawing.Size(774,449)                      
     $Form_GebruikerMaken.FormBorderStyle = "FixedDialog"                                     
     $Form_GebruikerMaken.TopMost         = $true                                                     
     $Form_GebruikerMaken.MaximizeBox     = $false                                                
@@ -267,6 +270,14 @@ $label_OUPad = New-Object System.Windows.Forms.Label
     $label_OUPad.TextAlign               = "MiddleRight"                              
     $label_OUPad.Text                    = "OU:"                                     
     $bord_Account.Controls.Add($label_OUPad)
+
+$label_Version = New-Object System.Windows.Forms.Label
+    $label_Version.Location                = New-Object System.Drawing.Size(520,132) 
+    $label_Version.Size                    = "230,14"                                     
+    $label_Version.TextAlign               = "MiddleRight"                              
+    $label_Version.Text                    = "Versie $($app_versie)"
+    $label_Version.ForeColor               = "DarkGray"                                    
+    $bord_Opties.Controls.Add($label_Version)
 
 # Buttons
 $knop_GebruikerAanmaken = New-Object System.Windows.Forms.Button
