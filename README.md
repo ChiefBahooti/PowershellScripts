@@ -30,8 +30,9 @@ Notes will become available after the release of this update.
 
 
 
-## 1.0
-No notes available for this release.
+## [1.0 - 11/06/2019](https://github.com/ChiefBahooti/PowershellScripts/compare/master@%7B3day%7D...master)
+Initial release.
+To many comments to summarize but trust me it's pretty good.
 
 
 ## Pull Requests
