@@ -1,7 +1,6 @@
-﻿#
-# Dit script is geschreven door Mark Lubberts.
+﻿# Dit script is geschreven door Mark Lubberts.
 # Voel je vrij om het ter referentie te gebruiken (of het gewoon in te leveren maar dat zou ik niet aanraden).
-# Fijne dag toegewenst en veel succes met het script!#
+# Fijne dag toegewenst en veel succes met het script!
 #
 # Oh juist, dit script werkt alleen op een Windows Server machine met Active Directory geïnstalleerd en geconfigureerd.
 
@@ -297,6 +296,3 @@ $txtb_Output = New-Object System.Windows.Forms.TextBox
 $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: De GUI kan bevriezen tijdens de import, dit is normaal!`r`n"
 $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: CSV gebruikers krijgen altijd het wachtwoord 'Potetos1!'`r`n"
 [void] $Form_GebruikerMaken.ShowDialog()
-
-
-
