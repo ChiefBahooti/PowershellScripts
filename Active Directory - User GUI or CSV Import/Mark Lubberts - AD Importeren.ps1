@@ -1,34 +1,57 @@
-﻿# Dit script is geschreven door Mark Lubberts.
+﻿# GEBRUIKER CONFIGURATIE
+# Dit stuk kan je aanpassen om de standaard configuratie bij te werken.
+# Pas bij voorkeur niks anders aan tenzij je weet wat je doet.
+#======================================================================#
+# Account informatie                                                   #
+$def_vnaam      = "Appel"                                              # Voornaam van de gebruiker.
+$def_anaam      = ""                                                   # Achternaam van de gebruiker.
+$def_email      = ""                                                   # Email van de gebruiker.
+$def_functie    = ""                                                   # Functie van de gebruiker.
+$def_telefoon   = ""                                                   # Telefoonnummer van de gebruiker.
+$def_username   = ""                                                   # Gebruikersnaam van de gebruiker.
+$def_password   = ""                                                   # Wachtwoord van de gebruiker.
+$def_oupad      = "OU=Wienkel,DC=intern,DC=dehosting,DC=club"          # OU van de gebruiker.
+                                                                       #
+# Accountopties                                                        #
+$def_AcAccess   = $True                                                # Is het account ingeschakeld?
+$def_Smartcard  = $False                                               # Smartcard authenticatie verplicht?
+$def_NoPassword = $False                                               # Inloggen zonder wachtwoord mogelijk?
+$def_NoChangePw = $False                                               # Mag de gebruiker het wachtwoord wijzigen?
+$def_NoPassExp  = $False                                               # Verloopt het wachtwoord van de gebruiker?
+$def_ChPasswd   = $True                                                # Moet de gebruiker op de eerstvolgende login zijn wachtwoord wijzigen?
+#======================================================================#
+# EINDE GEBRUIKER CONFIGURATIE
+
+# Dit script is geschreven door Mark Lubberts.
 # Voel je vrij om het ter referentie te gebruiken (of het gewoon in te leveren maar dat zou ik niet aanraden).
 # Fijne dag toegewenst en veel succes met het script!
 #
 # Oh juist, dit script werkt alleen op een Windows Server machine met Active Directory geïnstalleerd en geconfigureerd.
-
 
 #Laad nodige assemblies
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") # De library die we nodig hebben om een GUI te maken.
 Import-Module ActiveDirectory                                                    # De library die we nodig hebben om met ActiveDirectory te werken, dit geeft een error op niet Windows Server machines.
 
 # De afmetingen voor de GUI elementen (invoervelden, labels, knoppen)
-$size_textbox = New-Object System.Drawing.Size(240,14)
-$size_label = New-Object System.Drawing.Size(100,12)
-$size_button = New-Object System.Drawing.Size(130,58)
+$size_textbox     = New-Object System.Drawing.Size(240,14)
+$size_label       = New-Object System.Drawing.Size(100,12)
+$size_button      = New-Object System.Drawing.Size(130,58)
 
 # Een paar GUI elementen komen heel vaak voor, het doet ons doet deze een consistente plaatsing te geven.
-$label_x_left = 10
-$txtb_x_left = 112
-$txtb_x_right = 500
-$count_UsersMade = 0
+$label_x_left     = 10
+$txtb_x_left      = 112
+$txtb_x_right     = 500
+$count_UsersMade  = 0
 
 # De rechten op homefolders
-$home_Rechten = [System.Security.AccessControl.FileSystemRights]"Modify"
-$home_Control = [System.Security.AccessControl.AccessControlType]::Allow
-$home_Inherit = [System.Security.AccessControl.InheritanceFlags]"ContainerInherit, ObjectInherit" 
+$home_Rechten     = [System.Security.AccessControl.FileSystemRights]"Modify"
+$home_Control     = [System.Security.AccessControl.AccessControlType]::Allow
+$home_Inherit     = [System.Security.AccessControl.InheritanceFlags]"ContainerInherit, ObjectInherit" 
 $home_Propagation = [System.Security.AccessControl.PropagationFlags]"None"
 
 # Defineer een standaard wachtwoord voor accounts.
-$gebr_Password = ConvertTo-SecureString "Potetos1!" -AsPlainText -Force
-$gebr_ChPasswd = $True
+$gebr_Password    = ConvertTo-SecureString "Potetos1!" -AsPlainText -Force
+$gebr_ChPasswd    = $True
 
 # Functies in Powershell zijn nogal html-like, ze werken alleen als ze aangemaakt zijn *voor* je er een call naar doet.
 # Deze functie neemt argumenten vanuit het formulier of vanuit ImporteerCsvLijst en maakt een gebruiker aan op basis van deze argumenten.
@@ -36,8 +59,8 @@ Function MaakGebruikerAan {
 
     # Maak een degelijke username aan.
     if($txtb_Username.TextLength -eq 0) {
-    $gebr_filter = $gebr_Voornaam.Substring(0,1)
-    $gebr_unaam = "$gebr_filter.$gebr_Achternaam".ToLower()
+    $gebr_filter    = $gebr_Voornaam.Substring(0,1)
+    $gebr_unaam     = "$gebr_filter.$gebr_Achternaam".ToLower()
     } else {
         $gebr_unaam = $txtb_Username.Text.ToLower()
     }
@@ -92,12 +115,12 @@ Function ImporteerCsvLijst {
 
         ForEach($Gebruiker in $file_GebruikerCsv) {
             # Lees het Csv bestand uit en verzamel gebruikersinformatie.
-            $gebr_Voornaam = $Gebruiker.'Voornaam'
+            $gebr_Voornaam   = $Gebruiker.'Voornaam'
             $gebr_Achternaam = $Gebruiker.'Achternaam' 
-            $gebr_Email = $Gebruiker.'Email'
-            $gebr_Telnr = $Gebruiker.'Telnr'
-            $gebr_Functie = $Gebruiker.'Functie'
-            $gebr_OUPad = $Gebruiker.'OUPad'
+            $gebr_Email      = $Gebruiker.'Email'
+            $gebr_Telnr      = $Gebruiker.'Telnr'
+            $gebr_Functie    = $Gebruiker.'Functie'
+            $gebr_OUPad      = $Gebruiker.'OUPad'
             MaakGebruikerAan
         }
         $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: $count_UsersMade accounts zijn geïmporteerd."
@@ -111,25 +134,34 @@ Function ImporteerGebruikerGUI {
    # Aantal aangemaakte gebruikers weer op 0 zetten.
    $count_UsersMade = 0
 
-   $gebr_Voornaam = $txtb_FirstName.Text
-   $gebr_Achternaam =  $txtb_LastName.Text
-   $gebr_Email = $txtb_EmailAddr.Text
-   $gebr_Functie = $txtb_Description.Text
-   $gebr_telnr = $txtb_PhoneNumber.Text
-   $gebr_unaam = $txtb_Username.Text
-   $gebr_oupad = $txtb_OUPad.Text
+   $gebr_Voornaam           = $txtb_FirstName.Text
+   $gebr_Achternaam         =  $txtb_LastName.Text
+   $gebr_Email              = $txtb_EmailAddr.Text
+   $gebr_Functie            = $txtb_Description.Text
+   $gebr_telnr              = $txtb_PhoneNumber.Text
+   $gebr_unaam              = $txtb_Username.Text
+   $gebr_oupad              = $txtb_OUPad.Text
    MaakGebruikerAan
 }
 
-# Deze functie haalt snel het formulier leeg.
-Function WisFormulier { 
-    $txtb_FirstName.Text = ""
-    $txtb_LastName.Text = ""
-    $txtb_EmailAddr.Text = ""
-    $txtb_Description.Text = ""
-    $txtb_PhoneNumber.Text = ""
-    $txtb_Username.Text = ""
-    $txtb_Password.Text = ""
+# Deze functie zet het formulier snel terug naar de standaard configuratie.
+Function ResetFormulier { 
+    $txtb_FirstName.Text    = $def_vnaam
+    $txtb_Lastname.Text     = $def_anaam
+    $txtb_EmailAddr.Text    = $def_email
+    $txtb_Description.Text  = $def_functie
+    $txtb_PhoneNumber.Text  = $def_telefoon
+    $txtb_Username.Text     = $def_username
+    $txtb_Password.Text     = $def_password
+    $txtb_OUpad.Text        = $def_oupad
+
+
+    $chkb_AcAccess.Checked  = $def_AcAccess
+    $chkb_Smartcard.Checked = $def_Smartcard
+    $chkb_ReqPasswd.Checked = $def_NoPassword
+    $chkb_ChPasswd.Checked  = $def_NoChangePw
+    $chkb_ExpPasswd.Checked = $def_NoPassExp
+    $chkb_NewPasswd.Checked = $def_ChPasswd
 }
 
 
@@ -138,218 +170,223 @@ Function WisFormulier {
 
 # Een basis form en controls tekenen.
 $Form_GebruikerMaken = New-Object System.Windows.Forms.Form                                  
-    $Form_GebruikerMaken.Text = "Gebruiker aanmaken"                                         
-    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(764,439)                      
+    $Form_GebruikerMaken.Text            = "Gebruiker aanmaken"                                         
+    $Form_GebruikerMaken.Size            = New-Object System.Drawing.Size(764,439)                      
     $Form_GebruikerMaken.FormBorderStyle = "FixedDialog"                                     
-    $Form_GebruikerMaken.TopMost = $true                                                     
-    $Form_GebruikerMaken.MaximizeBox = $false                                                
-    $Form_GebruikerMaken.MinimizeBox = $true                                                 
-    $Form_GebruikerMaken.ControlBox = $true                                                  
-    $Form_GebruikerMaken.StartPosition = "CenterScreen"                                      
-    $Form_GebruikerMaken.Font = "Segoe UI"                                                   
+    $Form_GebruikerMaken.TopMost         = $true                                                     
+    $Form_GebruikerMaken.MaximizeBox     = $false                                                
+    $Form_GebruikerMaken.MinimizeBox     = $true                                                 
+    $Form_GebruikerMaken.ControlBox      = $true                                                  
+    $Form_GebruikerMaken.StartPosition   = "CenterScreen"                                      
+    $Form_GebruikerMaken.Font            = "Segoe UI"                                                   
 
 # Labels
 $label_FirstName = New-Object System.Windows.Forms.Label
-    $label_FirstName.Location = New-Object System.Drawing.Size($label_x_left,29) 
-    $label_FirstName.Size = $size_label                                     
-    $label_FirstName.TextAlign = "MiddleRight"                              
-    $label_FirstName.Text = "Voornaam:"                                     
+    $label_FirstName.Location            = New-Object System.Drawing.Size($label_x_left,29) 
+    $label_FirstName.Size                = $size_label                                     
+    $label_FirstName.TextAlign           = "MiddleRight"                              
+    $label_FirstName.Text                = "Voornaam:"                                     
     $form_GebruikerMaken.Controls.Add($label_FirstName)
 
 $label_LastName = New-Object System.Windows.Forms.Label
-    $label_LastName.Location = New-Object System.Drawing.Size($label_x_left,59)
-    $label_LastName.Size = $size_label                                     
-    $label_LastName.TextAlign = "MiddleRight"                               
-    $label_LastName.Text = "Achternaam:"                                   
+    $label_LastName.Location             = New-Object System.Drawing.Size($label_x_left,59)
+    $label_LastName.Size                 = $size_label                                     
+    $label_LastName.TextAlign            = "MiddleRight"                               
+    $label_LastName.Text                 = "Achternaam:"                                   
     $form_GebruikerMaken.Controls.Add($label_LastName)
 
 $label_EmailAddr = New-Object System.Windows.Forms.Label
-    $label_EmailAddr.Location = New-Object System.Drawing.Size($label_x_left,88)
-    $label_EmailAddr.Size = $size_label                                     
-    $label_EmailAddr.TextAlign = "MiddleRight"                             
-    $label_EmailAddr.Text = "Email:"                               
+    $label_EmailAddr.Location            = New-Object System.Drawing.Size($label_x_left,88)
+    $label_EmailAddr.Size                = $size_label                                     
+    $label_EmailAddr.TextAlign           = "MiddleRight"                             
+    $label_EmailAddr.Text                = "Email:"                               
     $form_GebruikerMaken.Controls.Add($label_EmailAddr)
 
 $label_Function = New-Object System.Windows.Forms.Label
-    $label_Function.Location = New-Object System.Drawing.Size($label_x_left,117)
-    $label_Function.Size = $size_label                                     
-    $label_Function.TextAlign = "MiddleRight"                             
-    $label_Function.Text = "Beschrijving:"                               
+    $label_Function.Location             = New-Object System.Drawing.Size($label_x_left,117)
+    $label_Function.Size                 = $size_label                                     
+    $label_Function.TextAlign            = "MiddleRight"                             
+    $label_Function.Text                 = "Functie:"                               
     $form_GebruikerMaken.Controls.Add($label_Function)
 
 $label_Telephone = New-Object System.Windows.Forms.Label
-    $label_Telephone.Location = New-Object System.Drawing.Size($label_x_left,146)
-    $label_Telephone.Size = $size_label                                     
-    $label_Telephone.TextAlign = "MiddleRight"                             
-    $label_Telephone.Text = "Telefoon:"                               
+    $label_Telephone.Location            = New-Object System.Drawing.Size($label_x_left,146)
+    $label_Telephone.Size                = $size_label                                     
+    $label_Telephone.TextAlign           = "MiddleRight"                             
+    $label_Telephone.Text                = "Telefoon:"                               
     $form_GebruikerMaken.Controls.Add($label_Telephone)
 
 $label_Username = New-Object System.Windows.Forms.Label
     $label_Username.Location = New-Object System.Drawing.Size($label_x_left,175) 
-    $label_Username.Size = $size_label                                     
-    $label_Username.TextAlign = "MiddleRight"                              
-    $label_Username.Text = "Gebruikersnaam:"                                     
+    $label_Username.Size                 = $size_label                                     
+    $label_Username.TextAlign            = "MiddleRight"                              
+    $label_Username.Text                 = "Gebruikersnaam:"                                     
     $form_GebruikerMaken.Controls.Add($label_Username)
 
 $label_Password = New-Object System.Windows.Forms.Label
-    $label_Password.Location = New-Object System.Drawing.Size($label_x_left,204) 
-    $label_Password.Size = $size_label                                     
-    $label_Password.TextAlign = "MiddleRight"                              
-    $label_Password.Text = "Wachtwoord:"                                     
+    $label_Password.Location             = New-Object System.Drawing.Size($label_x_left,204) 
+    $label_Password.Size                 = $size_label                                     
+    $label_Password.TextAlign            = "MiddleRight"                              
+    $label_Password.Text                 = "Wachtwoord:"                                     
     $form_GebruikerMaken.Controls.Add($label_Password)
 
 $label_OUPad = New-Object System.Windows.Forms.Label
-    $label_OUPad.Location = New-Object System.Drawing.Size($label_x_left,233) 
-    $label_OUPad.Size = $size_label                                     
-    $label_OUPad.TextAlign = "MiddleRight"                              
-    $label_OUPad.Text = "OU:"                                     
+    $label_OUPad.Location                = New-Object System.Drawing.Size($label_x_left,233) 
+    $label_OUPad.Size                    = $size_label                                     
+    $label_OUPad.TextAlign               = "MiddleRight"                              
+    $label_OUPad.Text                    = "OU:"                                     
     $form_GebruikerMaken.Controls.Add($label_OUPad)
 
 # Buttons
 $knop_GebruikerAanmaken = New-Object System.Windows.Forms.Button
-    $knop_GebruikerAanmaken.Location = New-Object System.Drawing.Size(363,24)
-    $knop_GebruikerAanmaken.Size = $size_button
-    $knop_GebruikerAanmaken.TextAlign = "MiddleCenter"
-    $knop_GebruikerAanmaken.Text = "Gebruiker aanmaken"
+    $knop_GebruikerAanmaken.Location     = New-Object System.Drawing.Size(363,24)
+    $knop_GebruikerAanmaken.Size         = $size_button
+    $knop_GebruikerAanmaken.TextAlign    = "MiddleCenter"
+    $knop_GebruikerAanmaken.Text         = "Gebruiker aanmaken"
     $knop_GebruikerAanmaken.Add_Click({ImporteerGebruikerGUI})
     $form_GebruikerMaken.Controls.Add($knop_GebruikerAanmaken)
 
 $knop_GebruikerImporteren = New-Object System.Windows.Forms.Button
-    $knop_GebruikerImporteren.Location = New-Object System.Drawing.Size(493,24)
-    $knop_GebruikerImporteren.Size = $size_button
-    $knop_GebruikerImporteren.TextAlign = "MiddleCenter"
-    $knop_GebruikerImporteren.Text = "Gebruikers importeren"
+    $knop_GebruikerImporteren.Location   = New-Object System.Drawing.Size(493,24)
+    $knop_GebruikerImporteren.Size       = $size_button
+    $knop_GebruikerImporteren.TextAlign  = "MiddleCenter"
+    $knop_GebruikerImporteren.Text       = "Gebruikers importeren"
 	$knop_GebruikerImporteren.Add_Click({ImporteerCsvLijst})
     $form_GebruikerMaken.Controls.Add($knop_GebruikerImporteren)
 
 $knop_FormulierLegen = New-Object System.Windows.Forms.Button
-    $knop_FormulierLegen.Location = New-Object System.Drawing.Size(623,24)
-    $knop_FormulierLegen.Size = $size_button
-    $knop_FormulierLegen.TextAlign = "MiddleCenter"
-    $knop_FormulierLegen.Text = "Wis formulier"
-    $knop_FormulierLegen.Add_Click({WisFormulier})
+    $knop_FormulierLegen.Location        = New-Object System.Drawing.Size(623,24)
+    $knop_FormulierLegen.Size            = $size_button
+    $knop_FormulierLegen.TextAlign       = "MiddleCenter"
+    $knop_FormulierLegen.Text            = "Wis formulier"
+    $knop_FormulierLegen.Add_Click({ResetFormulier})
     $form_GebruikerMaken.Controls.Add($knop_FormulierLegen)
 
 # Velden
 $txtb_FirstName = New-Object System.Windows.Forms.TextBox
-    $txtb_FirstName.Location = New-Object System.Drawing.Size($txtb_x_left,25)
-    $txtb_FirstName.Size = $size_textbox
+    $txtb_FirstName.Location             = New-Object System.Drawing.Size($txtb_x_left,25)
+    $txtb_FirstName.Size                 = $size_textbox
     $form_GebruikerMaken.Controls.Add($txtb_FirstName)
 
 $txtb_Lastname = New-Object System.Windows.Forms.TextBox
-    $txtb_Lastname.Location = New-Object System.Drawing.Size($txtb_x_left,54)
-    $txtb_Lastname.Size = $size_textbox
+    $txtb_Lastname.Location              = New-Object System.Drawing.Size($txtb_x_left,54)
+    $txtb_Lastname.Size                  = $size_textbox
     $form_GebruikerMaken.Controls.Add($txtb_Lastname)
 
 $txtb_EmailAddr = New-Object System.Windows.Forms.TextBox
-    $txtb_EmailAddr.Location = New-Object System.Drawing.Size($txtb_x_left,83)
-    $txtb_EmailAddr.Size = $size_textbox
+    $txtb_EmailAddr.Location             = New-Object System.Drawing.Size($txtb_x_left,83)
+    $txtb_EmailAddr.Size                 = $size_textbox
     $form_GebruikerMaken.Controls.Add($txtb_EmailAddr)
 
 $txtb_Description = New-Object System.Windows.Forms.TextBox
-    $txtb_Description.Location = New-Object System.Drawing.Size($txtb_x_left,112)
-    $txtb_Description.Size = $size_textbox
+    $txtb_Description.Location           = New-Object System.Drawing.Size($txtb_x_left,112)
+    $txtb_Description.Size               = $size_textbox
     $form_GebruikerMaken.Controls.Add($txtb_Description)
 
 $txtb_PhoneNumber = New-Object System.Windows.Forms.TextBox
-    $txtb_PhoneNumber.Location = New-Object System.Drawing.Size($txtb_x_left,141)
-    $txtb_PhoneNumber.Size = $size_textbox
+    $txtb_PhoneNumber.Location           = New-Object System.Drawing.Size($txtb_x_left,141)
+    $txtb_PhoneNumber.Size               = $size_textbox
     $form_GebruikerMaken.Controls.Add($txtb_PhoneNumber)
 
 $txtb_Username = New-Object System.Windows.Forms.TextBox
-    $txtb_Username.Location = New-Object System.Drawing.Size($txtb_x_left,170)
-    $txtb_Username.Size = $size_textbox
+    $txtb_Username.Location              = New-Object System.Drawing.Size($txtb_x_left,170)
+    $txtb_Username.Size                  = $size_textbox
     $form_GebruikerMaken.Controls.Add($txtb_Username)
 
 $txtb_Password = New-Object System.Windows.Forms.TextBox
-    $txtb_Password.Location = New-Object System.Drawing.Size($txtb_x_left,199)
-    $txtb_Password.Size = $size_textbox
-    $txtb_Password.PasswordChar = '*'
+    $txtb_Password.Location              = New-Object System.Drawing.Size($txtb_x_left,199)
+    $txtb_Password.Size                  = $size_textbox
+    $txtb_Password.PasswordChar          = '*'
     $form_GebruikerMaken.Controls.Add($txtb_Password)
 
 $txtb_OUPad = New-Object System.Windows.Forms.TextBox
-    $txtb_OUPad.Location = New-Object System.Drawing.Size($txtb_x_left,228)
-    $txtb_OUPad.Size = $size_textbox
-    $txtb_OUPad.Text = "OU=Wienkel,DC=intern,DC=dehosting,DC=club"
+    $txtb_OUPad.Location                 = New-Object System.Drawing.Size($txtb_x_left,228)
+    $txtb_OUPad.Size                     = $size_textbox
+    $txtb_OUPad.Text                     = "OU=Wienkel,DC=intern,DC=dehosting,DC=club"
     $form_GebruikerMaken.Controls.Add($txtb_OUPad)
 
 $txtb_Output = New-Object System.Windows.Forms.TextBox
-    $txtb_Output.Location = New-Object System.Drawing.Size(364,86)
-    $txtb_Output.Size = New-Object System.Drawing.Size(388,167)
-    $txtb_Output.ReadOnly = $True
-    $txtb_Output.BackColor = "White"
-    $txtb_Output.ScrollBars = "Vertical"
-    $txtb_Output.Multiline = $True
+    $txtb_Output.Location                = New-Object System.Drawing.Size(364,86)
+    $txtb_Output.Size                    = New-Object System.Drawing.Size(388,167)
+    $txtb_Output.ReadOnly                = $True
+    $txtb_Output.BackColor               = "White"
+    $txtb_Output.ScrollBars              = "Vertical"
+    $txtb_Output.Multiline               = $True
     $form_GebruikerMaken.Controls.Add($txtb_Output)
 
 # Borders
 $bord_Account = New-Object System.Windows.Forms.GroupBox
-    $bord_Account.Text = "Account informatie"
-    $bord_Account.Size = "355,255"
-    $bord_Account.Location = "3,3"
-    $bord_Account.Visible = $True
+    $bord_Account.Text                   = "Account informatie"
+    $bord_Account.Size                   = "355,255"
+    $bord_Account.Location               = "3,3"
+    $bord_Account.Visible                = $True
     $form_GebruikerMaken.Controls.Add($bord_Account)
 
 $bord_Opties = New-Object System.Windows.Forms.GroupBox
-    $bord_Opties.Text = "Accountopties"
-    $bord_Opties.Size = "753,148"
-    $bord_Opties.Location = "3,260"
-    $bord_Opties.Visible = $True
+    $bord_Opties.Text                    = "Accountopties"
+    $bord_Opties.Size                    = "753,148"
+    $bord_Opties.Location                = "3,260"
+    $bord_Opties.Visible                 = $True
     $form_GebruikerMaken.Controls.Add($bord_Opties)
 
 $bord_Control = New-Object System.Windows.Forms.GroupBox
-    $bord_Control.Text = "In- en output"
-    $bord_Control.Size = "396,255"
-    $bord_Control.Location = "360,3"
-    $bord_Control.Visible = $True
+    $bord_Control.Text                   = "In- en output"
+    $bord_Control.Size                   = "396,255"
+    $bord_Control.Location               = "360,3"
+    $bord_Control.Visible                = $True
     $form_GebruikerMaken.Controls.Add($bord_Control)
 
 # Vinkjes
 
 $chkb_ExpPasswd = New-Object System.Windows.Forms.CheckBox
-    $chkb_ExpPasswd.Text = "Wachtwoord verloopt nooit"
-    $chkb_ExpPasswd.Size = "300,20"
-    $chkb_ExpPasswd.Location = "10,100"
-    $chkb_ExpPasswd.Checked = $False
+    $chkb_ExpPasswd.Text                 = "Wachtwoord verloopt nooit"
+    $chkb_ExpPasswd.Size                 = "300,20"
+    $chkb_ExpPasswd.Location             = "10,100"
+    $chkb_ExpPasswd.Checked              = $False
     $bord_Opties.Controls.Add($chkb_ExpPasswd)
 
 $chkb_NewPasswd = New-Object System.Windows.Forms.CheckBox
-    $chkb_NewPasswd.Text = "Wachtwoord wijzigen op volgende login"
-    $chkb_NewPasswd.Size = "300,20"
-    $chkb_NewPasswd.Location = "10,120"
-    $chkb_NewPasswd.Checked = $True
+    $chkb_NewPasswd.Text                 = "Wachtwoord wijzigen op volgende login"
+    $chkb_NewPasswd.Size                 = "300,20"
+    $chkb_NewPasswd.Location             = "10,120"
+    $chkb_NewPasswd.Checked              = $True
     $bord_Opties.Controls.Add($chkb_NewPasswd)
 
 $chkb_Smartcard = New-Object System.Windows.Forms.CheckBox
-    $chkb_Smartcard.Text = "Alleen smartcard authenticatie toestaan"
-    $chkb_Smartcard.Size = "300,20"
-    $chkb_Smartcard.Location = "10,40"
-    $chkb_Smartcard.Checked = $False
+    $chkb_Smartcard.Text                 = "Alleen smartcard authenticatie toestaan"
+    $chkb_Smartcard.Size                 = "300,20"
+    $chkb_Smartcard.Location             = "10,40"
+    $chkb_Smartcard.Checked              = $False
     $bord_Opties.Controls.Add($chkb_Smartcard)
 
 $chkb_ReqPasswd = New-Object System.Windows.Forms.CheckBox
-    $chkb_ReqPasswd.Text = "Gebruiker mag inloggen zonder wachtwoord"
-    $chkb_ReqPasswd.Size = "300,20"
-    $chkb_ReqPasswd.Location = "10,60"
-    $chkb_ReqPasswd.Checked = $False
+    $chkb_ReqPasswd.Text                 = "Gebruiker mag inloggen zonder wachtwoord"
+    $chkb_ReqPasswd.Size                 = "300,20"
+    $chkb_ReqPasswd.Location             = "10,60"
+    $chkb_ReqPasswd.Checked              = $False
     $bord_Opties.Controls.Add($chkb_ReqPasswd)
 
 $chkb_ChPasswd = New-Object System.Windows.Forms.CheckBox
-    $chkb_ChPasswd.Text = "Gebruiker mag wachtwoord niet wijzigen"
-    $chkb_ChPasswd.Size = "300,20"
-    $chkb_ChPasswd.Location = "10,80"
-    $chkb_ChPasswd.Checked = $False
+    $chkb_ChPasswd.Text                  = "Gebruiker mag wachtwoord niet wijzigen"
+    $chkb_ChPasswd.Size                  = "300,20"
+    $chkb_ChPasswd.Location              = "10,80"
+    $chkb_ChPasswd.Checked               = $False
     $bord_Opties.Controls.Add($chkb_ChPasswd)
 
 $chkb_AcAccess = New-Object System.Windows.Forms.CheckBox
-    $chkb_AcAccess.Text = "Account is ingeschakeld"
-    $chkb_AcAccess.Size = "300,20"
-    $chkb_AcAccess.Location = "10,20"
-    $chkb_AcAccess.Checked = $True
+    $chkb_AcAccess.Text                  = "Account is ingeschakeld"
+    $chkb_AcAccess.Size                  = "300,20"
+    $chkb_AcAccess.Location              = "10,20"
+    $chkb_AcAccess.Checked               = $True
     $bord_Opties.Controls.Add($chkb_AcAccess)
 
 
-# Laat het formulier zien en waarschuw de gebruiker dat GUI freezes normaal zijn.
+# Waarschuw de gebruiker dat een vastlopende GUI normaal is bij grote imports.
 $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: De GUI kan bevriezen tijdens de import, dit is normaal!`r`n"
 $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: CSV gebruikers krijgen altijd het wachtwoord 'Potetos1!'`r`n"
+
+# Zet het formulier naar de standaard staat.
+ResetFormulier
+
+# En laat het venster zien.
 [void] $Form_GebruikerMaken.ShowDialog()
