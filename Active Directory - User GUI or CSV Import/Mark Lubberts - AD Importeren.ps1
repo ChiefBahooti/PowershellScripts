@@ -1,8 +1,7 @@
 ﻿# GEBRUIKER CONFIGURATIE
 # Dit stuk kan je aanpassen om de standaard configuratie bij te werken.
 # Pas bij voorkeur niks anders aan tenzij je weet wat je doet.
-#======================================================================#
-# Account informatie                                                   #
+#=Account informatie===================================================#
 $def_vnaam      = ""                                                   # Voornaam van de gebruiker.
 $def_anaam      = ""                                                   # Achternaam van de gebruiker.
 $def_email      = ""                                                   # Email van de gebruiker.
@@ -12,7 +11,7 @@ $def_username   = ""                                                   # Gebruik
 $def_password   = ""                                                   # Wachtwoord van de gebruiker.
 $def_oupad      = "OU=Wienkel,DC=intern,DC=dehosting,DC=club"          # OU van de gebruiker.
                                                                        #
-# Accountopties                                                        #
+#=Accountopties========================================================#
 $def_AcAccess   = $True                                                # Is het account ingeschakeld?
 $def_Smartcard  = $False                                               # Smartcard authenticatie verplicht?
 $def_NoPassword = $False                                               # Inloggen zonder wachtwoord mogelijk?
@@ -20,10 +19,11 @@ $def_NoChangePw = $False                                               # Mag de 
 $def_NoPassExp  = $False                                               # Verloopt het wachtwoord van de gebruiker?
 $def_ChPasswd   = $True                                                # Moet de gebruiker op de eerstvolgende login zijn wachtwoord wijzigen?
                                                                        #
-# Extra                                                                #
+#=Extra================================================================#
 $def_HomeDir    = $False                                               # Moet er een homedrive verbonden worden?
 $def_HomeLetter = ""                                                   # NYI: Welke drive letter moet aan de homedrive verbonden worden?
 $def_HomePath   = ""                                                   # NYI: Welk pad hoort bij deze Homedrive?
+                                                                       #
 #======================================================================#
 # EINDE GEBRUIKER CONFIGURATIE
 
