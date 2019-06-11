@@ -62,7 +62,7 @@ Function MaakGebruikerAan {
     # Maak de gebruiker zelf aan met alle gegevens en een geforceerde password reset.
     # We doen ook direct een controle of het account bestaat en geven de juiste melding door!
     New-Item -path $home_Folder -ItemType Directory -force
-    New-ADUser -Name "$gebr_Voornaam $gebr_Achternaam" -GivenName $gebr_Voornaam -Surname $gebr_Achternaam -SamAccountName $gebr_unaam -UserPrincipalName $gebr_unaam -OfficePhone $gebr_telnr -EmailAddress $gebr_Email -Description $gebr_Functie -AccountPassword $gebr_Password -Path $gebr_OUPad -HomeDrive "H:" -HomeDirectory "\\P4-DC1\UserHome$\$($gebr_unaam)" -ChangePasswordAtLogon $gebr_ChPasswd -Enabled $True
+    New-ADUser -Name "$gebr_Voornaam $gebr_Achternaam" -GivenName $gebr_Voornaam -Surname $gebr_Achternaam -SamAccountName $gebr_unaam -UserPrincipalName $gebr_unaam -OfficePhone $gebr_telnr -EmailAddress $gebr_Email -Description $gebr_Functie -AccountPassword $gebr_Password -Path $gebr_OUPad -HomeDrive "H:" -HomeDirectory "\\P4-DC1\UserHome$\$($gebr_unaam)" -ChangePasswordAtLogon $chkb_ChPasswd.Checked -Enabled $chkb_AcAccess.Checked
     
     # Permissions instellen op de user HomeFolder.
     $home_User = Get-ADUser -Identity $gebr_Unaam
@@ -282,7 +282,7 @@ $txtb_Output = New-Object System.Windows.Forms.TextBox
     $txtb_Output.Multiline = $True
     $form_GebruikerMaken.Controls.Add($txtb_Output)
 
-#Borders
+# Borders
 $bord_Account = New-Object System.Windows.Forms.GroupBox
     $bord_Account.Text = "Account informatie"
     $bord_Account.Size = "355,255"
@@ -303,6 +303,21 @@ $bord_Control = New-Object System.Windows.Forms.GroupBox
     $bord_Control.Location = "360,3"
     $bord_Control.Visible = $True
     $form_GebruikerMaken.Controls.Add($bord_Control)
+
+# Vinkjes
+$chkb_ChPasswd = New-Object System.Windows.Forms.CheckBox
+    $chkb_ChPasswd.Text = "Wachtwoord wijzigen op volgende login"
+    $chkb_ChPasswd.Size = "300,20"
+    $chkb_ChPasswd.Location = "10,20"
+    $chkb_ChPasswd.Checked = $True
+    $bord_Opties.Controls.Add($chkb_ChPasswd)
+
+$chkb_AcAccess = New-Object System.Windows.Forms.CheckBox
+    $chkb_AcAccess.Text = "Account is uitgeschakeld"
+    $chkb_AcAccess.Size = "300,20"
+    $chkb_AcAccess.Location = "10,40"
+    $bord_Opties.Controls.Add($chkb_AcAccess)
+
 
 # Laat het formulier zien en waarschuw de gebruiker dat GUI freezes normaal zijn.
 $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: De GUI kan bevriezen tijdens de import, dit is normaal!`r`n"
