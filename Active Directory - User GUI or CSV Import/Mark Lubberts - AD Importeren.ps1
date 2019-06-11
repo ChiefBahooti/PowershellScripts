@@ -141,7 +141,7 @@ Function WisFormulier {
 # Een basis form en controls tekenen.
 $Form_GebruikerMaken = New-Object System.Windows.Forms.Form                                  # Alle gebruikte functies van de Form class en wat ze doen.
     $Form_GebruikerMaken.Text = "Gebruiker aanmaken"                                         # Titel van het venster
-    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(784,317)                      # Resolutie van het venster
+    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(764,547)                      # Resolutie van het venster
     $Form_GebruikerMaken.FormBorderStyle = "FixedDialog"                                     # Venster kan niet groter of kleiner gemaakt worden
     $Form_GebruikerMaken.TopMost = $true                                                     # Het venster verschijnt altijd boven alle andere vensters.
     $Form_GebruikerMaken.MaximizeBox = $false                                                # Maximaliseerknop uitschakelen
@@ -151,12 +151,12 @@ $Form_GebruikerMaken = New-Object System.Windows.Forms.Form                     
     $Form_GebruikerMaken.Font = "Segoe UI"                                                   # Vensterfont op Segoe UI zetten.
 
 # Een label toevoegen aan het scherm.
-$label_HelloUser = New-Object System.Windows.Forms.Label                                     # Alle gebruikte functies van de Form class en wat ze doen.
-    $label_HelloUser.Location = New-Object System.Drawing.Size(3,3)                          # Waar moet het label staan? (x,y)
-    $label_HelloUser.Size = New-Object System.Drawing.Size(400,12)                           # Hoe groot moet het label zijn? (w,l)
-    $label_HelloUser.TextAlign = "MiddleLeft"                                                # Uitlijnen, left, right of center.
-    $label_HelloUser.Text = "Vul alle gevraagde gegevens in of importeer een csv bestand"    # De tekst in het label.
-    $form_GebruikerMaken.Controls.Add($label_HelloUser)                                      # Het element toevoegen aan het venster zodat het ook echt zichtbaar is.
+#$label_HelloUser = New-Object System.Windows.Forms.Label                                     # Alle gebruikte functies van de Form class en wat ze doen.
+#    $label_HelloUser.Location = New-Object System.Drawing.Size(3,3)                          # Waar moet het label staan? (x,y)
+#    $label_HelloUser.Size = New-Object System.Drawing.Size(400,12)                           # Hoe groot moet het label zijn? (w,l)
+#    $label_HelloUser.TextAlign = "MiddleLeft"                                                # Uitlijnen, left, right of center.
+#    $label_HelloUser.Text = "Vul alle gevraagde gegevens in of importeer een csv bestand"    # De tekst in het label.
+#    $form_GebruikerMaken.Controls.Add($label_HelloUser)                                      # Het element toevoegen aan het venster zodat het ook echt zichtbaar is.
 
 # Labels
 $label_FirstName = New-Object System.Windows.Forms.Label
@@ -217,7 +217,7 @@ $label_OUPad = New-Object System.Windows.Forms.Label
 
 # Buttons
 $knop_GebruikerAanmaken = New-Object System.Windows.Forms.Button
-    $knop_GebruikerAanmaken.Location = New-Object System.Drawing.Size(360,24)
+    $knop_GebruikerAanmaken.Location = New-Object System.Drawing.Size(363,24)
     $knop_GebruikerAanmaken.Size = $size_button
     $knop_GebruikerAanmaken.TextAlign = "MiddleCenter"
     $knop_GebruikerAanmaken.Text = "Gebruiker aanmaken"
@@ -225,7 +225,7 @@ $knop_GebruikerAanmaken = New-Object System.Windows.Forms.Button
     $form_GebruikerMaken.Controls.Add($knop_GebruikerAanmaken)
 
 $knop_GebruikerImporteren = New-Object System.Windows.Forms.Button
-    $knop_GebruikerImporteren.Location = New-Object System.Drawing.Size(490,24)
+    $knop_GebruikerImporteren.Location = New-Object System.Drawing.Size(493,24)
     $knop_GebruikerImporteren.Size = $size_button
     $knop_GebruikerImporteren.TextAlign = "MiddleCenter"
     $knop_GebruikerImporteren.Text = "Gebruikers importeren"
@@ -233,7 +233,7 @@ $knop_GebruikerImporteren = New-Object System.Windows.Forms.Button
     $form_GebruikerMaken.Controls.Add($knop_GebruikerImporteren)
 
 $knop_FormulierLegen = New-Object System.Windows.Forms.Button
-    $knop_FormulierLegen.Location = New-Object System.Drawing.Size(620,24)
+    $knop_FormulierLegen.Location = New-Object System.Drawing.Size(623,24)
     $knop_FormulierLegen.Size = $size_button
     $knop_FormulierLegen.TextAlign = "MiddleCenter"
     $knop_FormulierLegen.Text = "Wis formulier"
@@ -284,13 +284,35 @@ $txtb_OUPad = New-Object System.Windows.Forms.TextBox
     $form_GebruikerMaken.Controls.Add($txtb_OUPad)
 
 $txtb_Output = New-Object System.Windows.Forms.TextBox
-    $txtb_Output.Location = New-Object System.Drawing.Size(361,83)
+    $txtb_Output.Location = New-Object System.Drawing.Size(364,86)
     $txtb_Output.Size = New-Object System.Drawing.Size(388,167)
     $txtb_Output.ReadOnly = $True
     $txtb_Output.BackColor = "White"
     $txtb_Output.ScrollBars = "Vertical"
     $txtb_Output.Multiline = $True
     $form_GebruikerMaken.Controls.Add($txtb_Output)
+
+#Borders
+$bord_Account = New-Object System.Windows.Forms.GroupBox
+    $bord_Account.Text = "Account informatie"
+    $bord_Account.Size = "355,255"
+    $bord_Account.Location = "3,3"
+    $bord_Account.Visible = $True
+    $form_GebruikerMaken.Controls.Add($bord_Account)
+
+$bord_Opties = New-Object System.Windows.Forms.GroupBox
+    $bord_Opties.Text = "Accountopties"
+    $bord_Opties.Size = "753,255"
+    $bord_Opties.Location = "3,260"
+    $bord_Opties.Visible = $True
+    $form_GebruikerMaken.Controls.Add($bord_Opties)
+
+$bord_Control = New-Object System.Windows.Forms.GroupBox
+    $bord_Control.Text = "In- en output"
+    $bord_Control.Size = "396,255"
+    $bord_Control.Location = "360,3"
+    $bord_Control.Visible = $True
+    $form_GebruikerMaken.Controls.Add($bord_Control)
 
 # Laat het formulier zien en waarschuw de gebruiker dat GUI freezes normaal zijn.
 $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: De GUI kan bevriezen tijdens de import, dit is normaal!`r`n"
