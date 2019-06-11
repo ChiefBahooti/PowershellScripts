@@ -15,7 +15,7 @@ $def_oupad      = "OU=Wienkel,DC=intern,DC=dehosting,DC=club"          # OU van 
 $def_AcAccess   = $True                                                # Is het account ingeschakeld?
 $def_Smartcard  = $False                                               # Smartcard authenticatie verplicht?
 $def_NoPassword = $False                                               # Inloggen zonder wachtwoord mogelijk?
-$def_NoChangePw = $False                                               # Mag de gebruiker het wachtwoord wijzigen?
+$def_NoChangePw = $False                                               # Mag de gebruiker het wachtwoord wijzigen?z
 $def_NoPassExp  = $False                                               # Verloopt het wachtwoord van de gebruiker?
 $def_ChPasswd   = $True                                                # Moet de gebruiker op de eerstvolgende login zijn wachtwoord wijzigen?
                                                                        #
@@ -108,7 +108,7 @@ Function MaakGebruikerAan {
         $txtb_Output.Text = $txtb_Output.Text + "[AD_USR]: Het account '$gebr_Voornaam $gebr_Achternaam' kon niet worden aangemaakt!`r`n"
     } else {    
         $txtb_Output.Text = $txtb_Output.Text + "[AD_USR]: Het account '$gebr_Voornaam $gebr_Achternaam' is aangemaakt!`r`n"
-        $count_UsersMade++
+        $count_UsersMade = $count_Usersmade + 1
     }
 }
 
