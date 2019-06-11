@@ -1,7 +1,6 @@
-﻿#
-# Dit script is geschreven door Mark Lubberts.
+﻿# Dit script is geschreven door Mark Lubberts.
 # Voel je vrij om het ter referentie te gebruiken (of het gewoon in te leveren maar dat zou ik niet aanraden).
-# Fijne dag toegewenst en veel succes met het script!#
+# Fijne dag toegewenst en veel succes met het script!
 #
 # Oh juist, dit script werkt alleen op een Windows Server machine met Active Directory geïnstalleerd en geconfigureerd.
 
@@ -63,7 +62,7 @@ Function MaakGebruikerAan {
     # Maak de gebruiker zelf aan met alle gegevens en een geforceerde password reset.
     # We doen ook direct een controle of het account bestaat en geven de juiste melding door!
     New-Item -path $home_Folder -ItemType Directory -force
-    New-ADUser -Name "$gebr_Voornaam $gebr_Achternaam" -GivenName $gebr_Voornaam -Surname $gebr_Achternaam -SamAccountName $gebr_unaam -UserPrincipalName $gebr_unaam -OfficePhone $gebr_telnr -EmailAddress $gebr_Email -Description $gebr_Functie -AccountPassword $gebr_Password -Path $gebr_OUPad -HomeDrive "H:" -HomeDirectory "\\P4-DC1\UserHome$\$($gebr_unaam)" -ChangePasswordAtLogon $gebr_ChPasswd -Enabled $True
+    New-ADUser -Name "$gebr_Voornaam $gebr_Achternaam" -GivenName $gebr_Voornaam -Surname $gebr_Achternaam -SamAccountName $gebr_unaam -UserPrincipalName $gebr_unaam -OfficePhone $gebr_telnr -EmailAddress $gebr_Email -Description $gebr_Functie -AccountPassword $gebr_Password -Path $gebr_OUPad -HomeDrive "H:" -HomeDirectory "\\P4-DC1\UserHome$\$($gebr_unaam)" -PasswordNeverExpires $chkb_ExpPasswd.Checked -CannotChangePassword $chkb_ChPasswd.Checked -ChangePasswordAtLogon $chkb_NewPasswd.Checked -Enabled $chkb_AcAccess.Checked
     
     # Permissions instellen op de user HomeFolder.
     $home_User = Get-ADUser -Identity $gebr_Unaam
@@ -137,27 +136,17 @@ Function WisFormulier {
 # Hieronder vind je alle gebruikte GUI elementen.
 # Aanpassingen hier zijn vrij veilig hoewel het wel een knop kapot kan maken zal het programma zelf altijd starten.
 
-
-
 # Een basis form en controls tekenen.
-$Form_GebruikerMaken = New-Object System.Windows.Forms.Form                                  # Alle gebruikte functies van de Form class en wat ze doen.
-    $Form_GebruikerMaken.Text = "Gebruiker aanmaken"                                         # Titel van het venster
-    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(784,317)                      # Resolutie van het venster
-    $Form_GebruikerMaken.FormBorderStyle = "FixedDialog"                                     # Venster kan niet groter of kleiner gemaakt worden
-    $Form_GebruikerMaken.TopMost = $true                                                     # Het venster verschijnt altijd boven alle andere vensters.
-    $Form_GebruikerMaken.MaximizeBox = $false                                                # Maximaliseerknop uitschakelen
-    $Form_GebruikerMaken.MinimizeBox = $true                                                 # Minimaliseerknop inschakelen.
-    $Form_GebruikerMaken.ControlBox = $true                                                  # Sluitknop inschakelen
-    $Form_GebruikerMaken.StartPosition = "CenterScreen"                                      # Venster opent in het midden van het scherm.
-    $Form_GebruikerMaken.Font = "Segoe UI"                                                   # Vensterfont op Segoe UI zetten.
-
-# Een label toevoegen aan het scherm.
-$label_HelloUser = New-Object System.Windows.Forms.Label                                     # Alle gebruikte functies van de Form class en wat ze doen.
-    $label_HelloUser.Location = New-Object System.Drawing.Size(3,3)                          # Waar moet het label staan? (x,y)
-    $label_HelloUser.Size = New-Object System.Drawing.Size(400,12)                           # Hoe groot moet het label zijn? (w,l)
-    $label_HelloUser.TextAlign = "MiddleLeft"                                                # Uitlijnen, left, right of center.
-    $label_HelloUser.Text = "Vul alle gevraagde gegevens in of importeer een csv bestand"    # De tekst in het label.
-    $form_GebruikerMaken.Controls.Add($label_HelloUser)                                      # Het element toevoegen aan het venster zodat het ook echt zichtbaar is.
+$Form_GebruikerMaken = New-Object System.Windows.Forms.Form                                  
+    $Form_GebruikerMaken.Text = "Gebruiker aanmaken"                                         
+    $Form_GebruikerMaken.Size = New-Object System.Drawing.Size(764,439)                      
+    $Form_GebruikerMaken.FormBorderStyle = "FixedDialog"                                     
+    $Form_GebruikerMaken.TopMost = $true                                                     
+    $Form_GebruikerMaken.MaximizeBox = $false                                                
+    $Form_GebruikerMaken.MinimizeBox = $true                                                 
+    $Form_GebruikerMaken.ControlBox = $true                                                  
+    $Form_GebruikerMaken.StartPosition = "CenterScreen"                                      
+    $Form_GebruikerMaken.Font = "Segoe UI"                                                   
 
 # Labels
 $label_FirstName = New-Object System.Windows.Forms.Label
@@ -218,7 +207,7 @@ $label_OUPad = New-Object System.Windows.Forms.Label
 
 # Buttons
 $knop_GebruikerAanmaken = New-Object System.Windows.Forms.Button
-    $knop_GebruikerAanmaken.Location = New-Object System.Drawing.Size(360,24)
+    $knop_GebruikerAanmaken.Location = New-Object System.Drawing.Size(363,24)
     $knop_GebruikerAanmaken.Size = $size_button
     $knop_GebruikerAanmaken.TextAlign = "MiddleCenter"
     $knop_GebruikerAanmaken.Text = "Gebruiker aanmaken"
@@ -226,7 +215,7 @@ $knop_GebruikerAanmaken = New-Object System.Windows.Forms.Button
     $form_GebruikerMaken.Controls.Add($knop_GebruikerAanmaken)
 
 $knop_GebruikerImporteren = New-Object System.Windows.Forms.Button
-    $knop_GebruikerImporteren.Location = New-Object System.Drawing.Size(490,24)
+    $knop_GebruikerImporteren.Location = New-Object System.Drawing.Size(493,24)
     $knop_GebruikerImporteren.Size = $size_button
     $knop_GebruikerImporteren.TextAlign = "MiddleCenter"
     $knop_GebruikerImporteren.Text = "Gebruikers importeren"
@@ -234,7 +223,7 @@ $knop_GebruikerImporteren = New-Object System.Windows.Forms.Button
     $form_GebruikerMaken.Controls.Add($knop_GebruikerImporteren)
 
 $knop_FormulierLegen = New-Object System.Windows.Forms.Button
-    $knop_FormulierLegen.Location = New-Object System.Drawing.Size(620,24)
+    $knop_FormulierLegen.Location = New-Object System.Drawing.Size(623,24)
     $knop_FormulierLegen.Size = $size_button
     $knop_FormulierLegen.TextAlign = "MiddleCenter"
     $knop_FormulierLegen.Text = "Wis formulier"
@@ -285,7 +274,7 @@ $txtb_OUPad = New-Object System.Windows.Forms.TextBox
     $form_GebruikerMaken.Controls.Add($txtb_OUPad)
 
 $txtb_Output = New-Object System.Windows.Forms.TextBox
-    $txtb_Output.Location = New-Object System.Drawing.Size(361,83)
+    $txtb_Output.Location = New-Object System.Drawing.Size(364,86)
     $txtb_Output.Size = New-Object System.Drawing.Size(388,167)
     $txtb_Output.ReadOnly = $True
     $txtb_Output.BackColor = "White"
@@ -293,10 +282,74 @@ $txtb_Output = New-Object System.Windows.Forms.TextBox
     $txtb_Output.Multiline = $True
     $form_GebruikerMaken.Controls.Add($txtb_Output)
 
+# Borders
+$bord_Account = New-Object System.Windows.Forms.GroupBox
+    $bord_Account.Text = "Account informatie"
+    $bord_Account.Size = "355,255"
+    $bord_Account.Location = "3,3"
+    $bord_Account.Visible = $True
+    $form_GebruikerMaken.Controls.Add($bord_Account)
+
+$bord_Opties = New-Object System.Windows.Forms.GroupBox
+    $bord_Opties.Text = "Accountopties"
+    $bord_Opties.Size = "753,148"
+    $bord_Opties.Location = "3,260"
+    $bord_Opties.Visible = $True
+    $form_GebruikerMaken.Controls.Add($bord_Opties)
+
+$bord_Control = New-Object System.Windows.Forms.GroupBox
+    $bord_Control.Text = "In- en output"
+    $bord_Control.Size = "396,255"
+    $bord_Control.Location = "360,3"
+    $bord_Control.Visible = $True
+    $form_GebruikerMaken.Controls.Add($bord_Control)
+
+# Vinkjes
+
+$chkb_ExpPasswd = New-Object System.Windows.Forms.CheckBox
+    $chkb_ExpPasswd.Text = "Wachtwoord verloopt nooit"
+    $chkb_ExpPasswd.Size = "300,20"
+    $chkb_ExpPasswd.Location = "10,100"
+    $chkb_ExpPasswd.Checked = $False
+    $bord_Opties.Controls.Add($chkb_ExpPasswd)
+
+$chkb_NewPasswd = New-Object System.Windows.Forms.CheckBox
+    $chkb_NewPasswd.Text = "Wachtwoord wijzigen op volgende login"
+    $chkb_NewPasswd.Size = "300,20"
+    $chkb_NewPasswd.Location = "10,120"
+    $chkb_NewPasswd.Checked = $True
+    $bord_Opties.Controls.Add($chkb_NewPasswd)
+
+$chkb_Smartcard = New-Object System.Windows.Forms.CheckBox
+    $chkb_Smartcard.Text = "Alleen smartcard authenticatie toestaan"
+    $chkb_Smartcard.Size = "300,20"
+    $chkb_Smartcard.Location = "10,40"
+    $chkb_Smartcard.Checked = $False
+    $bord_Opties.Controls.Add($chkb_Smartcard)
+
+$chkb_ReqPasswd = New-Object System.Windows.Forms.CheckBox
+    $chkb_ReqPasswd.Text = "Gebruiker mag inloggen zonder wachtwoord"
+    $chkb_ReqPasswd.Size = "300,20"
+    $chkb_ReqPasswd.Location = "10,60"
+    $chkb_ReqPasswd.Checked = $False
+    $bord_Opties.Controls.Add($chkb_ReqPasswd)
+
+$chkb_ChPasswd = New-Object System.Windows.Forms.CheckBox
+    $chkb_ChPasswd.Text = "Gebruiker mag wachtwoord niet wijzigen"
+    $chkb_ChPasswd.Size = "300,20"
+    $chkb_ChPasswd.Location = "10,80"
+    $chkb_ChPasswd.Checked = $False
+    $bord_Opties.Controls.Add($chkb_ChPasswd)
+
+$chkb_AcAccess = New-Object System.Windows.Forms.CheckBox
+    $chkb_AcAccess.Text = "Account is ingeschakeld"
+    $chkb_AcAccess.Size = "300,20"
+    $chkb_AcAccess.Location = "10,20"
+    $chkb_AcAccess.Checked = $True
+    $bord_Opties.Controls.Add($chkb_AcAccess)
+
+
 # Laat het formulier zien en waarschuw de gebruiker dat GUI freezes normaal zijn.
 $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: De GUI kan bevriezen tijdens de import, dit is normaal!`r`n"
 $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: CSV gebruikers krijgen altijd het wachtwoord 'Potetos1!'`r`n"
 [void] $Form_GebruikerMaken.ShowDialog()
-
-
-
