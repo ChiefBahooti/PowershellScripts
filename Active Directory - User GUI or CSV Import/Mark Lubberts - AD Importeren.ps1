@@ -1,6 +1,7 @@
 ﻿# GEBRUIKER CONFIGURATIE
-# Dit stuk kan je aanpassen om de standaard configuratie bij te werken.
-# Pas bij voorkeur niks anders aan tenzij je weet wat je doet.
+# Pas dit aan om zo dicht mogelijk bij de door jou benodigde standaard configuratie te komen.
+# Instellingen die hier worden opgeslagen zullen pas doorgevoerd worden bij het aanmaken van een gebruiker via GUI of CSV import.
+
 #=Account informatie===================================================#
 $def_vnaam      = ""                                                   # Voornaam van de gebruiker.
 $def_anaam      = ""                                                   # Achternaam van de gebruiker.
