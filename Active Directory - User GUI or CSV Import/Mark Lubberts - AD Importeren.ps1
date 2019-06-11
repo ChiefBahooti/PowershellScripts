@@ -19,6 +19,7 @@ $size_button = New-Object System.Drawing.Size(130,58)
 $label_x_left = 10
 $txtb_x_left = 112
 $txtb_x_right = 500
+$count_UsersMade = 0
 
 # De rechten op homefolders
 $home_Rechten = [System.Security.AccessControl.FileSystemRights]"Modify"
@@ -28,6 +29,7 @@ $home_Propagation = [System.Security.AccessControl.PropagationFlags]"None"
 
 # Defineer een standaard wachtwoord voor accounts.
 $gebr_Password = ConvertTo-SecureString "Potetos1!" -AsPlainText -Force
+$gebr_ChPasswd = $True
 
 # Functies in Powershell zijn nogal html-like, ze werken alleen als ze aangemaakt zijn *voor* je er een call naar doet.
 # Deze functie neemt argumenten vanuit het formulier of vanuit ImporteerCsvLijst en maakt een gebruiker aan op basis van deze argumenten.
@@ -41,6 +43,14 @@ Function MaakGebruikerAan {
         $gebr_unaam = $txtb_Username.Text.ToLower()
     }
 
+    # Is er een wachtwoord in de GUI opgegeven?
+    # Als dit zo is moet er SecureString van gemaakt worden en hoeft de gebruiker dit wachtwoord ook niet te wijzigen.
+    if(!$txtb_Password.TextLength -eq 0) { 
+        $gebr_Password = ConvertTo-SecureString $txtb_Password.Text -AsPlainText -Force
+        $gebr_ChPasswd = $False
+    }
+
+
     # Nog even checken of de gebruiker niet al bestaat...
     if(@(Get-ADUser -Filter { UserPrincipalName -eq $gebr_unaam }).Count -eq 1) {  
         $txtb_Output.Text = $txtb_Output.Text + "[AD_USR]: Het account '$gebr_Voornaam $gebr_Achternaam' bestaat al!`r`n"   
@@ -53,7 +63,7 @@ Function MaakGebruikerAan {
     # Maak de gebruiker zelf aan met alle gegevens en een geforceerde password reset.
     # We doen ook direct een controle of het account bestaat en geven de juiste melding door!
     New-Item -path $home_Folder -ItemType Directory -force
-    New-ADUser -Name "$gebr_Voornaam $gebr_Achternaam" -GivenName $gebr_Voornaam -Surname $gebr_Achternaam -SamAccountName $gebr_unaam -UserPrincipalName $gebr_unaam -OfficePhone $gebr_telnr -EmailAddress $gebr_Email -Description $gebr_Functie -AccountPassword $gebr_Password -Path $gebr_OUPad -HomeDrive "H:" -HomeDirectory "\\P4-DC1\UserHome$\$($gebr_unaam)" -ChangePasswordAtLogon $True -Enabled $True
+    New-ADUser -Name "$gebr_Voornaam $gebr_Achternaam" -GivenName $gebr_Voornaam -Surname $gebr_Achternaam -SamAccountName $gebr_unaam -UserPrincipalName $gebr_unaam -OfficePhone $gebr_telnr -EmailAddress $gebr_Email -Description $gebr_Functie -AccountPassword $gebr_Password -Path $gebr_OUPad -HomeDrive "H:" -HomeDirectory "\\P4-DC1\UserHome$\$($gebr_unaam)" -ChangePasswordAtLogon $gebr_ChPasswd -Enabled $True
     
     # Permissions instellen op de user HomeFolder.
     $home_User = Get-ADUser -Identity $gebr_Unaam
@@ -66,20 +76,21 @@ Function MaakGebruikerAan {
         $txtb_Output.Text = $txtb_Output.Text + "[AD_USR]: Het account '$gebr_Voornaam $gebr_Achternaam' kon niet worden aangemaakt!`r`n"
     } else {    
         $txtb_Output.Text = $txtb_Output.Text + "[AD_USR]: Het account '$gebr_Voornaam $gebr_Achternaam' is aangemaakt!`r`n"
+        $count_UsersMade++
     }
 }
 
 # Deze functie leest een Csv bestand uit en importeert deze naar de MaakGebruikerAan functie.
 Function ImporteerCsvLijst {
-    # Tijdens grote imports hangt de GUI even, de gebruiker informeren is wel zo handig.
-    
+
+    # Aantal aangemaakte gebruikers weer op 0 zetten.
+    $count_UsersMade = 0
+
     $dial_OpenCsv = New-Object System.Windows.Forms.OpenFileDialog
     $dial_OpenCsv.Filter = "Comma Seperated Value(*.csv)|*.csv"
-    If($dial_OpenCsv.ShowDialog() -eq "OK") {
+    If($dial_OpenCsv.ShowDialog() -eq "OK") { # Het volgende blok alleen doorwerken als de gebruiker op OK klikt en niet als er op Annuleren geklikt is.
         $file_GebruikerCsv = Import-Csv $dial_OpenCsv.FileName
 
-        # Geef een 5 seconden waarschuwing voor we beginnen.
-        
         ForEach($Gebruiker in $file_GebruikerCsv) {
             # Lees het Csv bestand uit en verzamel gebruikersinformatie.
             $gebr_Voornaam = $Gebruiker.'Voornaam'
@@ -90,6 +101,7 @@ Function ImporteerCsvLijst {
             $gebr_OUPad = $Gebruiker.'OUPad'
             MaakGebruikerAan
         }
+        $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: $count_UsersMade accounts zijn geïmporteerd."
     }
 }
 
@@ -97,6 +109,8 @@ Function ImporteerCsvLijst {
 # Omdat de GUI zelf ook losse accounts aan kan maken moet ik een CSV import emuleren.
 # Deze functie doet dat.
 Function ImporteerGebruikerGUI {
+   # Aantal aangemaakte gebruikers weer op 0 zetten.
+   $count_UsersMade = 0
 
    $gebr_Voornaam = $txtb_FirstName.Text
    $gebr_Achternaam =  $txtb_LastName.Text
@@ -261,17 +275,19 @@ $txtb_Username = New-Object System.Windows.Forms.TextBox
 $txtb_Password = New-Object System.Windows.Forms.TextBox
     $txtb_Password.Location = New-Object System.Drawing.Size($txtb_x_left,199)
     $txtb_Password.Size = $size_textbox
+    $txtb_Password.PasswordChar = '*'
     $form_GebruikerMaken.Controls.Add($txtb_Password)
 
 $txtb_OUPad = New-Object System.Windows.Forms.TextBox
     $txtb_OUPad.Location = New-Object System.Drawing.Size($txtb_x_left,228)
     $txtb_OUPad.Size = $size_textbox
+    $txtb_OUPad.Text = "OU=Wienkel,DC=intern,DC=dehosting,DC=club"
     $form_GebruikerMaken.Controls.Add($txtb_OUPad)
 
 $txtb_Output = New-Object System.Windows.Forms.TextBox
     $txtb_Output.Location = New-Object System.Drawing.Size(361,83)
     $txtb_Output.Size = New-Object System.Drawing.Size(388,167)
-    $txtb_Output.ReadOnly = $False
+    $txtb_Output.ReadOnly = $True
     $txtb_Output.BackColor = "White"
     $txtb_Output.ScrollBars = "Vertical"
     $txtb_Output.Multiline = $True
@@ -279,6 +295,7 @@ $txtb_Output = New-Object System.Windows.Forms.TextBox
 
 # Laat het formulier zien en waarschuw de gebruiker dat GUI freezes normaal zijn.
 $txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: De GUI kan bevriezen tijdens de import, dit is normaal!`r`n"
+$txtb_Output.Text = $txtb_Output.Text + "[AD_CSV]: CSV gebruikers krijgen altijd het wachtwoord 'Potetos1!'`r`n"
 [void] $Form_GebruikerMaken.ShowDialog()
 
 
