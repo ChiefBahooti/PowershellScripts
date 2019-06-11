@@ -3,7 +3,7 @@
 # Pas bij voorkeur niks anders aan tenzij je weet wat je doet.
 #======================================================================#
 # Account informatie                                                   #
-$def_vnaam      = "Appel"                                              # Voornaam van de gebruiker.
+$def_vnaam      = ""                                                   # Voornaam van de gebruiker.
 $def_anaam      = ""                                                   # Achternaam van de gebruiker.
 $def_email      = ""                                                   # Email van de gebruiker.
 $def_functie    = ""                                                   # Functie van de gebruiker.
