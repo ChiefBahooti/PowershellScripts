@@ -25,7 +25,7 @@ These may work with Powershell on Linux but I do not guarantee anything.
 
 # Changelog
 
-## [1.1 - 25/06/2019](https://github.com/ChiefBahooti/PowershellScripts/compare/1.1)
+## [1.1 - 25/06/2019](https://github.com/ChiefBahooti/PowershellScripts/compare/master@%7B1day%7D...master)
 * Added a considerable amount of toggles to help with account configuration.
 
 
